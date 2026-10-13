@@ -1,0 +1,23 @@
+---
+import '../styles/global.css';
+import WhatsAppContact from '../components/WhatsAppContact.astro';
+
+const {
+  title = 'MVM Segurança e Medicina Ocupacional',
+  description = 'Segurança e medicina ocupacional com atendimento personalizado.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <slot />
+    <WhatsAppContact />
+  </body>
+</html>

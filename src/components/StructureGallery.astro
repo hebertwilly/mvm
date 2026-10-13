@@ -1,0 +1,60 @@
+---
+// Prévia provisória; a substituição pelas fotos reais está documentada internamente.
+const { photos = [] } = Astro.props;
+---
+{photos.length > 0 && (
+  <section class="section structure-gallery" aria-labelledby="structure-title" data-gallery>
+    <div class="container">
+      <span class="reference-kicker">ESTRUTURA</span>
+      <h2 id="structure-title" class="section-title" data-motion="reveal">Conheça a nossa estrutura</h2>
+      <div class="gallery-grid">
+        {photos.map(({ src, alt, caption }, index) => (
+          <button type="button" class="gallery-item" data-gallery-item={index} aria-label={`Ampliar foto: ${caption}`}>
+            <img src={src} alt={alt} loading="lazy" />
+          </button>
+        ))}
+      </div>
+    </div>
+    <dialog class="gallery-dialog" aria-label="Foto ampliada">
+      <button type="button" class="gallery-close" data-gallery-close aria-label="Fechar foto ampliada">×</button>
+      <figure><img alt="" data-gallery-image /><figcaption data-gallery-caption></figcaption></figure>
+    </dialog>
+  </section>
+)}
+
+<script>
+  document.querySelectorAll('[data-gallery]').forEach((gallery) => {
+    const dialog = gallery.querySelector('.gallery-dialog');
+    const image = gallery.querySelector('[data-gallery-image]');
+    const caption = gallery.querySelector('[data-gallery-caption]');
+    const close = gallery.querySelector('[data-gallery-close]');
+    let opener;
+    gallery.querySelectorAll('[data-gallery-item]').forEach((button) => {
+      button.addEventListener('click', () => {
+        opener = button;
+        const photo = button.querySelector('img');
+        image.src = photo.currentSrc || photo.src;
+        image.alt = photo.alt;
+        caption.textContent = button.getAttribute('aria-label').replace(/^Ampliar foto: /, '');
+        dialog.showModal();
+        close.focus();
+      });
+    });
+    close.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('close', () => opener?.focus({ preventScroll: true }));
+  });
+</script>
+
+<style>
+  .gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); }
+  .gallery-item { padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+  .gallery-item img { width: 100%; aspect-ratio: 1.95 / 1; object-fit: cover; border-radius: 10px; }
+  .gallery-item:focus-visible { outline: 3px solid var(--cor-vermelho-destaque); outline-offset: 4px; }
+  .gallery-dialog { width: min(900px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 16px; border: 0; border-radius: 16px; }
+  .gallery-dialog::backdrop { background: rgb(0 0 0 / 75%); }
+  .gallery-dialog figure { display: grid; justify-items: center; }
+  .gallery-dialog img { max-height: calc(100dvh - 100px); object-fit: contain; }
+  .gallery-close { display: grid; place-items: center; width: 44px; height: 44px; margin-left: auto; border: 0; background: transparent; font-size: 30px; cursor: pointer; }
+  @media (max-width: 52rem) { .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 38rem) { .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+</style>

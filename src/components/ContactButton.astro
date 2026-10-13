@@ -1,0 +1,15 @@
+---
+import { getWhatsAppUrl } from '../config/contact.js';
+import Icon from './Icon.astro';
+const { label, message = 'general', variant = 'dark', final = false, icon = final ? 'whatsapp' : null } = Astro.props;
+const url = getWhatsAppUrl(message);
+---
+{final && !url ? (
+  <button class={`button button--${variant}`} type="button" disabled aria-describedby="contact-pending">
+    {icon && <Icon name={icon} />}<span class="button-label">{label}</span>
+  </button>
+) : (
+  <a class={`button button--${variant}`} href={url ?? '#contato'} target={url ? '_blank' : undefined} rel={url ? 'noopener noreferrer' : undefined}>
+    {icon && <Icon name={icon} />}<span class="button-label">{label}</span>
+  </a>
+)}

@@ -1,0 +1,176 @@
+---
+import Brand from './Brand.astro';
+import ContactButton from './ContactButton.astro';
+import { navigation, getNavigationCurrent } from '../config/navigation.js';
+---
+<header class="site-header" data-header>
+  <div class="container header-row">
+    <Brand />
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" hidden>
+      <span class="menu-lines" aria-hidden="true"></span>
+      <span class="menu-label">Abrir menu</span>
+    </button>
+    <nav id="main-navigation" class="main-navigation" aria-label="Navegação principal">
+      <ul>
+        {navigation.map(({ label, href, children }) => children ? (
+          <li class="nav-services" data-service-menu>
+            <div class="nav-service-row">
+              <a class="nav-link" href={href} aria-current={getNavigationCurrent(href, Astro.url.pathname)}>{label}</a>
+              <button class="service-toggle" type="button" aria-label="Abrir submenu de serviços" aria-expanded="false" aria-controls="service-submenu" data-service-toggle hidden>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" /></svg>
+              </button>
+            </div>
+            <ul id="service-submenu" class="service-submenu" hidden>
+              {children.map((item) => <li><a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>{item.label}</a></li>)}
+            </ul>
+          </li>
+        ) : <li><a class="nav-link" href={href} aria-current={getNavigationCurrent(href, Astro.url.pathname)}>{label}</a></li>)}
+      </ul>
+      <ContactButton label="Fale conosco" icon="whatsapp" />
+    </nav>
+  </div>
+</header>
+<!-- Inicializa antes de renderizar o conteúdo para reservar a altura correta. -->
+<script is:inline>
+  (() => {
+    const header = document.querySelector('[data-header]');
+    const toggle = document.querySelector('.menu-toggle');
+    const navigation = document.querySelector('#main-navigation');
+    const serviceMenu = header?.querySelector('[data-service-menu]');
+    const serviceToggle = header?.querySelector('[data-service-toggle]');
+    const submenu = header?.querySelector('#service-submenu');
+    if (!header || !toggle || !navigation || !serviceMenu || !serviceToggle || !submenu || !window.matchMedia) return;
+    const mobile = window.matchMedia('(max-width: 52rem)');
+    const hover = window.matchMedia('(hover: hover)');
+    let servicesHovered = false;
+    const reserveHeader = () => {
+      document.documentElement.style.setProperty('--header-height', `${header.getBoundingClientRect().height}px`);
+    };
+    const setServices = (open, returnFocus = false) => {
+      const focusWasInSubmenu = !open && submenu.contains(document.activeElement);
+      serviceToggle.setAttribute('aria-expanded', String(open));
+      serviceToggle.setAttribute('aria-label', open ? 'Fechar submenu de serviços' : 'Abrir submenu de serviços');
+      submenu.hidden = !open;
+      if (returnFocus || focusWasInSubmenu) serviceToggle.focus();
+    };
+    const setMenu = (open, returnFocus = false) => {
+      const focusWasInMenu = mobile.matches && !open && navigation.contains(document.activeElement);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.querySelector('.menu-label').textContent = open ? 'Fechar menu' : 'Abrir menu';
+      navigation.hidden = mobile.matches && !open;
+      if (!open) setServices(false);
+      if (returnFocus || focusWasInMenu) toggle.focus();
+    };
+    const syncMenu = () => {
+      servicesHovered = false;
+      toggle.hidden = !mobile.matches;
+      header.classList.toggle('menu-enabled', mobile.matches);
+      setMenu(false);
+      reserveHeader();
+    };
+    toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+    serviceToggle.hidden = false;
+    serviceToggle.addEventListener('click', () => setServices(submenu.hidden));
+    serviceToggle.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setServices(true);
+        submenu.querySelector('a')?.focus();
+      }
+    });
+    serviceMenu.addEventListener('mouseenter', () => {
+      if (mobile.matches || !hover.matches) return;
+      servicesHovered = true;
+      setServices(true);
+    });
+    serviceMenu.addEventListener('mouseleave', () => {
+      servicesHovered = false;
+      if (!mobile.matches && !serviceMenu.contains(document.activeElement)) setServices(false);
+    });
+    serviceMenu.addEventListener('focusout', (event) => {
+      if (!servicesHovered && !serviceMenu.contains(event.relatedTarget)) setServices(false);
+    });
+    document.addEventListener('click', (event) => {
+      if (!serviceMenu.contains(event.target)) setServices(false);
+    });
+    navigation.addEventListener('click', (event) => {
+      if (event.target.closest('a') && mobile.matches) setMenu(false, true);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      if (!submenu.hidden) {
+        event.preventDefault();
+        setServices(false, true);
+      } else if (toggle.getAttribute('aria-expanded') === 'true') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+    });
+    mobile.addEventListener('change', syncMenu);
+    syncMenu();
+    window.addEventListener('resize', reserveHeader, { passive: true });
+    if ('ResizeObserver' in window) {
+      try { new ResizeObserver(reserveHeader).observe(header); } catch { /* Reserva CSS permanece ativa. */ }
+    }
+    const syncShadow = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', syncShadow, { passive: true });
+    syncShadow();
+  })();
+</script>
+
+<style>
+  .nav-services { position: relative; }
+  .nav-service-row { display: flex; align-items: center; gap: 2px; }
+  .nav-link[aria-current="location"]::after { transform: scaleX(1); }
+  .service-toggle {
+    display: grid;
+    place-items: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+    border: 0;
+    border-radius: 8px;
+    color: var(--cor-preto);
+    background: var(--cor-branco);
+    cursor: pointer;
+  }
+  .service-toggle:hover { background: var(--cor-cinza-claro); }
+  .service-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .main-navigation .service-submenu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: block;
+    width: 280px;
+    max-width: calc(100vw - 2 * var(--gutter));
+    max-height: calc(100vh - var(--header-height) - 16px);
+    max-height: calc(100dvh - var(--header-height) - 16px);
+    overflow-y: auto;
+    padding: 8px;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    background: var(--cor-branco);
+    box-shadow: 0 8px 24px rgb(20 20 20 / 8%);
+  }
+  .service-submenu a { display: flex; align-items: center; min-height: 48px; padding: 10px 12px; border-radius: 6px; font-size: 14px; line-height: 1.5; }
+  .service-submenu a:hover, .service-submenu a[aria-current="page"] { color: var(--cor-vermelho-destaque); background: var(--cor-cinza-claro); }
+  @media (max-width: 52rem) {
+    .site-header { width: 100vw; }
+    .header-row { width: min(1200px, calc(100vw - 2 * var(--gutter))); }
+    .main-navigation { min-width: 0; align-items: stretch; overflow-x: hidden; overscroll-behavior: contain; }
+    .menu-enabled .main-navigation { width: 100vw; }
+    .main-navigation > ul { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; flex-wrap: nowrap; gap: 0; width: 100%; min-width: 0; }
+    .main-navigation > ul > li { display: block; width: 100%; min-width: 0; }
+    .main-navigation > ul > li > .nav-link,
+    .nav-service-row > .nav-link { display: flex; align-items: center; min-height: 48px; padding: 12px 16px; text-align: left; }
+    .main-navigation > ul > li > .nav-link { width: 100%; }
+    .nav-services { position: static; width: 100%; min-width: 0; }
+    .nav-service-row { width: 100%; min-width: 0; gap: 0; }
+    .nav-service-row > .nav-link { flex: 1; min-width: 0; }
+    .nav-service-row > .service-toggle { flex: 0 0 48px; width: 48px; min-height: 48px; border-radius: 0; }
+    .main-navigation .service-submenu { position: static; display: block; width: 100%; max-width: 100%; max-height: none; margin: 0; padding: 4px 0 8px 16px; overflow: visible; border: 0; border-radius: 0; box-shadow: none; }
+    .main-navigation .service-submenu li { display: block; width: 100%; }
+    .main-navigation .service-submenu a { width: 100%; min-height: 48px; padding: 12px 16px; }
+    .main-navigation > .button { display: flex; width: 100%; min-height: 48px; }
+  }
+</style>

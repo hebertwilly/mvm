@@ -1,0 +1,215 @@
+---
+import { getWhatsAppUrl } from '../config/contact.js';
+import Icon from './Icon.astro';
+
+// As URLs vêm exclusivamente da configuração central, inclusive no navegador.
+const subjects = [
+  { label: 'Segurança do trabalho', message: 'safety' },
+  { label: 'Medicina ocupacional', message: 'occupational' },
+  { label: 'Atendimento in loco', message: 'onsite' },
+  { label: 'Outros assuntos', message: 'general' },
+];
+---
+
+<mvm-whatsapp-contact class="whatsapp-contact">
+  <div
+    id="whatsapp-contact-panel"
+    class="whatsapp-panel"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="whatsapp-contact-title"
+    aria-describedby="whatsapp-contact-intro whatsapp-contact-instructions"
+    hidden
+  >
+    <div class="whatsapp-panel-heading">
+      <h2 id="whatsapp-contact-title">Fale com a MVM</h2>
+      <button class="whatsapp-close" type="button" aria-label="Fechar janela de contato" data-close>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18" /></svg>
+      </button>
+    </div>
+    <p id="whatsapp-contact-intro">Olá! Como podemos ajudar sua empresa?</p>
+    <p id="whatsapp-contact-instructions" class="whatsapp-instructions">Escolha o assunto para iniciar uma conversa no WhatsApp.</p>
+    <fieldset class="whatsapp-subjects">
+      <legend>Assunto</legend>
+      {subjects.map(({ label, message }) => {
+        const url = getWhatsAppUrl(message);
+        return (
+          <label class="whatsapp-subject">
+            <input type="radio" name="whatsapp-subject" value={url ?? ''} disabled={!url} />
+            <span>{label}</span>
+          </label>
+        );
+      })}
+    </fieldset>
+    <button class="whatsapp-continue" type="button" data-continue disabled>Continuar no WhatsApp</button>
+    <p class="whatsapp-note">Você será direcionado para o WhatsApp.</p>
+  </div>
+  <button
+    class="whatsapp-launcher"
+    type="button"
+    aria-label="Abrir contato com a MVM pelo WhatsApp"
+    aria-expanded="false"
+    aria-controls="whatsapp-contact-panel"
+    aria-haspopup="dialog"
+    data-launcher
+    hidden
+  >
+    <Icon name="whatsapp" />
+  </button>
+</mvm-whatsapp-contact>
+
+<script>
+  class WhatsAppContact extends HTMLElement {
+    listeners = new AbortController();
+
+    connectedCallback() {
+      const launcher = this.querySelector('[data-launcher]');
+      const panel = this.querySelector('.whatsapp-panel');
+      const close = this.querySelector('[data-close]');
+      const continueButton = this.querySelector('[data-continue]');
+      if (!(launcher instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)
+        || !(close instanceof HTMLButtonElement) || !(continueButton instanceof HTMLButtonElement)) return;
+
+      this.listeners?.abort();
+      this.listeners = new AbortController();
+      const { signal } = this.listeners;
+      const setOpen = (open) => {
+        panel.hidden = !open;
+        if (open) panel.scrollTop = 0;
+        launcher.setAttribute('aria-expanded', String(open));
+        // Janela não modal: a página continua navegável e a rolagem permanece livre.
+        (open ? close : launcher).focus({ preventScroll: true });
+      };
+      const selectedUrl = () => this.querySelector<HTMLInputElement>('input:checked')?.value;
+      launcher.addEventListener('click', () => setOpen(panel.hidden), { signal });
+      close.addEventListener('click', () => setOpen(false), { signal });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !panel.hidden) {
+          event.preventDefault();
+          setOpen(false);
+        }
+      }, { signal });
+      this.addEventListener('change', () => {
+        continueButton.disabled = !selectedUrl();
+      }, { signal });
+      continueButton.addEventListener('click', () => {
+        const url = selectedUrl();
+        if (continueButton.disabled || !url) return;
+        // Abre apenas o destino com texto preenchido. O envio depende do usuário.
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }, { signal });
+      launcher.hidden = false;
+    }
+
+    disconnectedCallback() {
+      this.listeners?.abort();
+    }
+  }
+
+  if (!customElements.get('mvm-whatsapp-contact')) {
+    customElements.define('mvm-whatsapp-contact', WhatsAppContact);
+  }
+</script>
+
+<style>
+  .whatsapp-contact {
+    --contact-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: var(--contact-bottom);
+    z-index: 90;
+    display: block;
+  }
+  @media (min-width: 52.001rem) {
+    .whatsapp-contact {
+      --contact-bottom: 40px;
+      right: max(56px, calc((100vw - 1200px) / 2));
+    }
+  }
+  .whatsapp-launcher {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    color: #fff;
+    background: #128c46;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgb(20 20 20 / 16%);
+    cursor: pointer;
+  }
+  .whatsapp-launcher :global(svg) { width: 32px; height: 32px; }
+  .whatsapp-launcher:hover { background: #0e783b; }
+  .whatsapp-panel {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    right: 0;
+    width: 340px;
+    max-width: calc(100vw - 32px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+    max-height: calc(100vh - var(--header-height) - var(--contact-bottom) - 84px);
+    max-height: calc(100dvh - var(--header-height) - var(--contact-bottom) - 84px);
+    overflow-y: auto;
+    padding: 20px;
+    color: var(--cor-preto);
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgb(20 20 20 / 12%);
+  }
+  .whatsapp-panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+  .whatsapp-panel h2 { font-size: 22px; }
+  .whatsapp-panel p { color: var(--cor-preto); font-size: 14px; line-height: 1.5; }
+  .whatsapp-close {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 50%;
+    color: var(--cor-preto);
+    background: #fff;
+    cursor: pointer;
+  }
+  .whatsapp-close:hover { background: #f5f5f5; }
+  .whatsapp-instructions { margin-top: 12px; }
+  .whatsapp-subjects { display: grid; gap: 8px; min-width: 0; margin: 20px 0; padding: 0; border: 0; }
+  .whatsapp-subjects legend { margin-bottom: 8px; padding: 0; font-size: 14px; font-weight: 700; }
+  .whatsapp-subject {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+  }
+  .whatsapp-subject:has(:checked) { border-color: var(--cor-vermelho-destaque); background: #fcf0f1; }
+  .whatsapp-subject:focus-within { outline: 2px solid var(--cor-vermelho-destaque); outline-offset: 2px; }
+  .whatsapp-subject input { flex-shrink: 0; width: 18px; height: 18px; margin: 0; accent-color: var(--cor-vermelho-destaque); }
+  .whatsapp-subject input:focus-visible { outline-offset: 2px; }
+  .whatsapp-continue {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #fff;
+    background: var(--cor-preto);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .whatsapp-continue:hover:enabled { background: #333; }
+  .whatsapp-continue:disabled { color: #666; background: #eee; cursor: not-allowed; }
+  .whatsapp-panel .whatsapp-note { margin-top: 12px; font-size: 12px; text-align: center; }
+  @media (prefers-reduced-motion: no-preference) {
+    .whatsapp-panel:not([hidden]) { animation: contact-enter 160ms ease-out; }
+    @keyframes contact-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  }
+</style>

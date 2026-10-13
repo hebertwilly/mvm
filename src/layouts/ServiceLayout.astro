@@ -1,0 +1,88 @@
+---
+import InternalLayout from './InternalLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import SegmentCards from '../components/SegmentCards.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import ServiceVisual from '../components/ServiceVisual.astro';
+import ContactButton from '../components/ContactButton.astro';
+import BannerSingle from '../components/BannerSingle.astro';
+import { individualBanners } from '../config/bannerSlides.js';
+import { services } from '../config/services.js';
+
+const { service } = Astro.props;
+const related = services.filter(({ slug }) => slug !== service.slug);
+---
+<InternalLayout title={service.pageTitle} description={service.description}>
+  <BannerSingle banner={individualBanners[service.slug]} />
+
+  <section class="section editorial-section" aria-labelledby="what-title">
+    <div class="container editorial-row">
+      <SectionTitle id="what-title">O que é</SectionTitle>
+      <div class="editorial-copy" data-motion="reveal"><p>{service.what}</p></div>
+    </div>
+  </section>
+
+  <section class="section services" aria-labelledby="when-title">
+    <div class="container">
+      <SectionTitle id="when-title">Quando sua empresa pode precisar</SectionTitle>
+      <div class="card-grid situation-grid">
+        {service.when.map(({ title, text }) => (
+          <article class="card service-situation" data-motion="card"><h3>{title}</h3><p>{text}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="audience-title">
+    <div class="container">
+      <SectionTitle id="audience-title">Para quem é o atendimento</SectionTitle>
+      <SegmentCards />
+    </div>
+  </section>
+
+  <section class:list={['section', 'service-how', { services: !service.secondaryVisual }]} aria-labelledby="how-title">
+    {service.secondaryVisual ? (
+      <div class="container split-grid">
+        <div class="split-copy">
+          <SectionTitle id="how-title">Como a MVM atende</SectionTitle>
+          <p data-motion="reveal">{service.how}</p>
+        </div>
+        <ServiceVisual variant={service.secondaryVisual} reveal />
+      </div>
+    ) : (
+      <div class="container editorial-row">
+        <SectionTitle id="how-title">Como a MVM atende</SectionTitle>
+        <div class="editorial-copy" data-motion="reveal"><p>{service.how}</p></div>
+      </div>
+    )}
+  </section>
+
+  <section class="section services" aria-labelledby="faq-title">
+    <div class="container faq-container">
+      <SectionTitle id="faq-title">Perguntas frequentes</SectionTitle>
+      <div class="faq-list">
+        {service.faq.map(({ question, answer }) => (
+          <details class="faq-item" data-motion="reveal">
+            <summary>{question}</summary>
+            <p>{answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="related-title">
+    <div class="container">
+      <SectionTitle id="related-title">Conheça também</SectionTitle>
+      <ServiceCards items={related} />
+    </div>
+  </section>
+
+  <section id="contato" class="contact-section" aria-labelledby="contact-title">
+    <div class="container contact-content">
+      <h2 id="contact-title" data-motion="reveal">{service.contactTitle}</h2>
+      <p data-motion="reveal">{service.contactText}</p>
+      <div data-motion="reveal"><ContactButton label="Falar com a MVM" message={service.message} variant="light" icon="whatsapp" /></div>
+    </div>
+  </section>
+</InternalLayout>

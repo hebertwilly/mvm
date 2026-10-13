@@ -1,0 +1,19 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/services.css';
+const { title, description } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <Header />
+  <main id="conteudo" class="internal-page" tabindex="-1">
+    <slot />
+  </main>
+  <Footer />
+  <script>
+    // Reutiliza integralmente a revelação aprovada, inclusive a repetição.
+    import '../scripts/home.js';
+  </script>
+</BaseLayout>

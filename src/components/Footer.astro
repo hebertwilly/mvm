@@ -1,0 +1,28 @@
+---
+import Brand from './Brand.astro';
+import Icon from './Icon.astro';
+import { navigation, getNavigationCurrent } from '../config/navigation.js';
+import { contact, getEmailUrl, getWhatsAppUrl } from '../config/contact.js';
+const whatsappUrl = getWhatsAppUrl('general');
+const emailUrl = getEmailUrl();
+---
+<footer class="site-footer">
+  <div class="container footer-main">
+    <div class="footer-brand"><Brand compact /></div>
+    <nav class="footer-navigation" aria-label="Navegação do rodapé">
+      <h2>Navegação</h2>
+      <ul>{navigation.map(({ label, href }) => <li><a href={href} aria-current={getNavigationCurrent(href, Astro.url.pathname)}>{label}</a></li>)}</ul>
+    </nav>
+    <div class="footer-channels">
+      <h2>Canais de contato</h2>
+      <ul>
+        {whatsappUrl && <li><a href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" />Fale pelo WhatsApp</a></li>}
+        <li><a href={contact.instagram.url} target="_blank" rel="noopener noreferrer"><Icon name="instagram" />{contact.instagram.handle}</a></li>
+        <li>{emailUrl ? <a href={emailUrl}><Icon name="mail" />{contact.email}</a> : <span class="footer-channel-text"><Icon name="mail" />{contact.email}</span>}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container"><p>© {new Date().getFullYear()} MVM. Todos os direitos reservados.</p></div>
+  </div>
+</footer>

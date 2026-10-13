@@ -1,0 +1,131 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import { Image } from 'astro:assets';
+import firstPhoto from '../assets/images/Colaboração em segurança e saúde ocupacional-3.png';
+import secondPhoto from '../assets/images/Medição de pressão no atendimento ocupacional-2.png';
+---
+<section class="section history-timeline" aria-labelledby="history-timeline-title" data-history-timeline>
+  <div class="container">
+    <span class="reference-kicker">LINHA DO TEMPO</span>
+    <SectionTitle id="history-timeline-title">Uma história em evolução</SectionTitle>
+    <div class="timeline-events" data-timeline-events>
+      <div class="timeline-line" aria-hidden="true" data-timeline-line><span data-timeline-progress></span></div>
+      <article class="timeline-event">
+        <span class="timeline-marker" data-timeline-marker aria-hidden="true"></span>
+        <div class="timeline-event-body">
+          <Image src={firstPhoto} alt="Profissionais em reunião de trabalho" widths={[200, 300]} sizes="140px" loading="lazy" />
+          <div><span class="timeline-year">2019</span><h3>Fundação da MVM</h3><p>Início da empresa a partir da experiência de Mayara Moraes e das demandas identificadas em segurança do trabalho.</p></div>
+        </div>
+      </article>
+      <article class="timeline-event">
+        <span class="timeline-marker" data-timeline-marker aria-hidden="true"></span>
+        <div class="timeline-event-body timeline-event-body--last">
+          <div><span class="timeline-year">2022</span><h3>Expansão para a clínica</h3><p>Ampliação da atuação com o crescimento da demanda em medicina ocupacional.</p></div>
+          <Image src={secondPhoto} alt="Atendimento de saúde ocupacional" widths={[200, 300]} sizes="140px" loading="lazy" />
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const root = document.querySelector('[data-history-timeline]');
+  if (root) {
+    const events = root.querySelector('[data-timeline-events]');
+    const line = root.querySelector('[data-timeline-line]');
+    const progress = root.querySelector('[data-timeline-progress]');
+    const markers = [...root.querySelectorAll('[data-timeline-marker]')];
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mobile = window.matchMedia('(max-width: 52rem)');
+    let timeline;
+    let observer;
+    let listeners;
+    let visible = false;
+
+    const measure = () => {
+      const box = events.getBoundingClientRect();
+      const first = markers[0].getBoundingClientRect();
+      const second = markers[1].getBoundingClientRect();
+      const x1 = first.left + first.width / 2 - box.left;
+      const y1 = first.top + first.height / 2 - box.top;
+      const x2 = second.left + second.width / 2 - box.left;
+      const y2 = second.top + second.height / 2 - box.top;
+      line.style.left = `${x1}px`;
+      line.style.top = `${y1}px`;
+      line.style.width = mobile.matches ? '2px' : `${x2 - x1}px`;
+      line.style.height = mobile.matches ? `${y2 - y1}px` : '2px';
+      events.dataset.axis = mobile.matches ? 'vertical' : 'horizontal';
+    };
+    const sync = () => timeline?.paused(!visible || document.hidden);
+    const rebuild = () => {
+      timeline?.kill();
+      timeline = undefined;
+      measure();
+      gsap.set([progress, ...markers], { clearProps: 'all' });
+      if (motion.matches) { return; }
+      gsap.set(progress, mobile.matches
+        ? { scaleY: 0, transformOrigin: 'center top' }
+        : { scaleX: 0, transformOrigin: 'left center' });
+      gsap.set(markers, { backgroundColor: '#d9d9d9' });
+      const scale = mobile.matches ? 'scaleY' : 'scaleX';
+      timeline = gsap.timeline({ repeat: -1, paused: true });
+      timeline.to(progress, { [scale]: .08, duration: .6, ease: 'power2.out' })
+        .to(markers[0], { backgroundColor: '#b51f28', duration: .25 })
+        .to(progress, { [scale]: 1, duration: 1.3, ease: 'power2.inOut' })
+        .to(markers[1], { backgroundColor: '#b51f28', duration: .25 })
+        .to({}, { duration: 4 })
+        .to(progress, { [scale]: 0, duration: 1.2, ease: 'power2.inOut' })
+        .to(markers, { backgroundColor: '#d9d9d9', duration: .35 }, '<');
+      sync();
+    };
+    const stop = () => {
+      timeline?.kill();
+      timeline = undefined;
+      observer?.disconnect();
+      listeners?.abort();
+    };
+    const start = () => {
+      stop();
+      listeners = new AbortController();
+      const { signal } = listeners;
+      observer = new IntersectionObserver(([entry]) => {
+        visible = Boolean(entry?.isIntersecting);
+        sync();
+      }, { threshold: .1 });
+      observer.observe(root);
+      motion.addEventListener('change', rebuild, { signal });
+      mobile.addEventListener('change', rebuild, { signal });
+      window.addEventListener('resize', measure, { passive: true, signal });
+      document.addEventListener('visibilitychange', sync, { signal });
+      window.addEventListener('pagehide', stop, { once: true, signal });
+      rebuild();
+    };
+    start();
+    window.addEventListener('pageshow', (event) => { if (event.persisted) start(); });
+  }
+</script>
+
+<style>
+  .timeline-events { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
+  .timeline-line { position: absolute; z-index: 0; top: 11px; left: 11px; width: calc(50% + var(--grid-gap) / 2); height: 2px; background: #dedede; }
+  .timeline-line span { display: block; width: 100%; height: 100%; background: var(--cor-vermelho-destaque); }
+  .timeline-event { position: relative; z-index: 1; padding: 36px 24px 0 0; }
+  .timeline-event-body { display: flex; align-items: center; gap: 20px; }
+  .timeline-event-body img { width: 132px; height: 90px; flex: none; object-fit: cover; border-radius: 8px; }
+  .timeline-event-body > div { min-width: 0; }
+  .timeline-marker { position: absolute; top: 0; left: 0; width: 24px; height: 24px; border: 3px solid #fff; border-radius: 50%; background: var(--cor-vermelho-destaque); box-shadow: 0 0 0 1px #d9d9d9; }
+  .timeline-year { display: block; margin-bottom: 8px; font-size: 24px; font-weight: 750; line-height: 1.2; }
+  .timeline-event h3 { margin-bottom: 8px; }
+  .timeline-event p { max-width: 470px; }
+  @media (max-width: 52rem) {
+    .timeline-events { grid-template-columns: 1fr; gap: 28px; }
+    .timeline-line { top: 12px; left: 11px; width: 2px; height: 50%; }
+    .timeline-event { padding: 0 0 0 44px; }
+    .timeline-year { margin-bottom: 4px; }
+    .timeline-event-body { gap: 16px; }
+    .timeline-event-body img { width: 112px; height: 82px; }
+  }
+  @media (max-width: 38rem) { .timeline-event-body { align-items: flex-start; flex-direction: column; } .timeline-event-body--last img { order: -1; } }
+</style>

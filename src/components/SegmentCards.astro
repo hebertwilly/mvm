@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+import { segments } from '../config/services.js';
+---
+<ul class="card-grid segment-cards" aria-label="Segmentos atendidos">
+  {segments.map(({ title, icon }) => (
+    <li class="card advantage-card" data-motion="card">
+      <Icon name={icon} class="card-icon" />
+      <h3>{title}</h3>
+    </li>
+  ))}
+</ul>

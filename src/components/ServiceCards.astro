@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro';
+import { services } from '../config/services.js';
+const { items = services } = Astro.props;
+---
+<div class:list={['card-grid', { 'service-related-grid': items.length === 2 }]}>
+  {items.map(({ icon, cardTitle, cardText, title, text, href }) => (
+    <article class="service-card-item" data-motion="card">
+      <a class="card service-card" href={href} aria-label={`Conhecer ${cardTitle ?? title}`}>
+        <Icon name={icon} class="card-icon" />
+        <div>
+          <h3>{cardTitle ?? title}</h3>
+          <p>{cardText ?? text}</p>
+          <span class="text-button" aria-hidden="true">Saiba mais <Icon name="arrow" /></span>
+        </div>
+      </a>
+    </article>
+  ))}
+</div>

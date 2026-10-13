@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BannerCarousel from '../components/BannerCarousel.astro';
+import { homeSlides } from '../config/bannerSlides.js';
+import SectionTitle from '../components/SectionTitle.astro';
+import ContactButton from '../components/ContactButton.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import Icon from '../components/Icon.astro';
+import { getWhatsAppUrl } from '../config/contact.js';
+import onsite from '../assets/images/Medição de pressão no atendimento ocupacional-2.png';
+import about from '../assets/images/Colaboração em segurança e saúde ocupacional-3.png';
+
+const services = [
+  { icon: 'helmet', title: 'Segurança do trabalho', text: 'Projetos e orientação técnica para sua operação.', href: '/servicos/seguranca-do-trabalho/' },
+  { icon: 'medical', title: 'Medicina ocupacional', text: 'Cuidado ocupacional com atendimento personalizado.', href: '/servicos/medicina-ocupacional/' },
+  { icon: 'location', title: 'Atendimento in loco', text: 'Exames e atendimento dentro da sua empresa.', href: '/servicos/atendimento-in-loco/' },
+];
+const advantages = [
+  { icon: 'people', title: 'Atendimento personalizado', text: 'Entendemos sua realidade e indicamos as melhores soluções.' },
+  { icon: 'operation', title: 'Proximidade com sua operação', text: 'Atuação próxima, com agilidade e flexibilidade.' },
+  { icon: 'growth', title: 'Atuação desde 2019', text: 'Experiência prática e compromisso contínuo com nossos clientes.' },
+];
+const steps = [
+  { title: 'Contato', text: 'Você entra em contato pelo WhatsApp.' },
+  { title: 'Avaliação', text: 'Entendemos sua demanda e a realidade da sua empresa.' },
+  { title: 'Proposta', text: 'Apresentamos uma solução personalizada.' },
+  { title: 'Atendimento', text: 'Realizamos o atendimento conforme o escopo contratado.' },
+];
+---
+
+<BaseLayout
+  title="MVM Segurança e Medicina Ocupacional"
+  description="Segurança e medicina ocupacional com atendimento personalizado. A MVM tem clientes em São Paulo e no Paraná; consulte outras localidades."
+>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <Header />
+  <main id="conteudo" tabindex="-1">
+    <section id="home" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="visually-hidden">MVM Segurança e Medicina Ocupacional</h1>
+      <BannerCarousel id="home-banner" label="Destaques da MVM" slides={homeSlides} />
+    </section>
+
+    <section id="servicos" class="section services" aria-labelledby="services-title">
+      <div class="container">
+        <SectionTitle id="services-title">Soluções adaptadas à realidade da sua empresa.</SectionTitle>
+        <ServiceCards items={services} />
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="advantages-title">
+      <div class="container">
+        <SectionTitle id="advantages-title">Por que escolher a MVM?</SectionTitle>
+        <div class="card-grid">
+          {advantages.map(({ icon, title, text }) => (
+            <article class="card advantage-card" data-motion="card">
+              <Icon name={icon} class="card-icon" />
+              <h3>{title}</h3><p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-section" aria-labelledby="onsite-title">
+      <div class="container split-grid">
+        <div class="split-copy">
+          <SectionTitle id="onsite-title">Levamos o cuidado até a sua equipe.</SectionTitle>
+          <p data-motion="reveal">Realizamos exames e atendimento ocupacional dentro da sua empresa, com mais praticidade, comodidade e menos impacto na sua operação.</p>
+          <div data-motion="reveal"><ContactButton label="Consultar atendimento in loco" message="onsite" icon="location" /></div>
+        </div>
+        <figure class="section-photo" data-motion="reveal">
+          <Image src={onsite} alt="Imagem ilustrativa de uma medição de pressão arterial em atendimento ocupacional." widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="steps-title">
+      <div class="container">
+        <SectionTitle id="steps-title">Como funciona nosso atendimento</SectionTitle>
+        <ol class="steps-grid">
+          {steps.map(({ title, text }, index) => (
+            <li class="step" data-motion="card">
+              <span class="step-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              <h3>{title}</h3><p>{text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section id="sobre" class="section split-section about" aria-labelledby="about-title">
+      <div class="container split-grid">
+        <div class="split-copy">
+          <SectionTitle id="about-title">Conheça a MVM</SectionTitle>
+          <p data-motion="reveal">Desde 2019, unimos conhecimento técnico e atendimento personalizado. Hoje, temos clientes em São Paulo e no Paraná.</p>
+          <a class="text-button about-link" href="/sobre-nos/">Saiba mais sobre nós <Icon name="arrow" /></a>
+        </div>
+        <figure class="section-photo" data-motion="reveal">
+          <Image src={about} alt="Imagem ilustrativa de duas pessoas analisando informações sobre segurança e saúde ocupacional." widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
+    <section id="contato" class="contact-section" aria-labelledby="contact-title">
+      <div class="container contact-content">
+        <h2 id="contact-title" data-motion="reveal">Vamos cuidar da segurança e da saúde da sua empresa?</h2>
+        <p data-motion="reveal">Converse com a equipe da MVM e solicite uma proposta personalizada.</p>
+        <div data-motion="reveal"><ContactButton label="Falar com a MVM no WhatsApp" variant="light" final /></div>
+        {!getWhatsAppUrl() && <p id="contact-pending" class="contact-pending">WhatsApp ainda não disponível.</p>}
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <script>
+    import '../scripts/home.js';
+  </script>
+</BaseLayout>

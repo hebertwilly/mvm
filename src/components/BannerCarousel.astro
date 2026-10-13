@@ -1,0 +1,176 @@
+---
+import BannerPanel from './BannerPanel.astro';
+import '../styles/banner-carousel.css';
+
+const { slides, id, label } = Astro.props;
+---
+<mvm-banner-carousel class="banner-carousel" role="region" aria-roledescription="carrossel" aria-label={label}>
+  <div class="banner-slides">
+    {slides.map((slide, index) => (
+      <div
+        class:list={['banner-slide', { 'is-active': index === 0 }]}
+        role="group"
+        aria-roledescription="slide"
+        aria-label={`${index + 1} de ${slides.length}: ${slide.label}`}
+        aria-hidden={index === 0 ? undefined : 'true'}
+        hidden={index !== 0}
+        style={`--desktop-position: ${slide.desktopPosition}; --mobile-position: ${slide.mobilePosition};`}
+      >
+        <BannerPanel banner={slide} id={`${id}-title-${index + 1}`} priority={index === 0} />
+      </div>
+    ))}
+  </div>
+  <div class="container banner-navigation" hidden>
+    <span class="banner-counter" aria-hidden="true"><span data-current>01</span> <span>/ {String(slides.length).padStart(2, '0')}</span></span>
+    <div class="banner-selectors" role="group" aria-label="Escolher banner">
+      {slides.map((slide, index) => (
+        <button type="button" class="banner-selector" data-slide-to={index} aria-label={`Ir para o banner ${index + 1}: ${slide.label}`} aria-current={index === 0 ? 'true' : undefined}>
+          <span class="banner-selector-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          <span class="banner-selector-label" aria-hidden="true">{slide.label}</span>
+        </button>
+      ))}
+    </div>
+    <div class="banner-arrows">
+      <button type="button" class="banner-arrow" data-previous aria-label="Banner anterior">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><path d="M20 12H5m6 6-6-6 6-6" /></svg>
+      </button>
+      <button type="button" class="banner-arrow" data-next aria-label="Próximo banner">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6" /></svg>
+      </button>
+    </div>
+  </div>
+</mvm-banner-carousel>
+
+<script>
+  class MvmBannerCarousel extends HTMLElement {
+    connectedCallback() {
+      this.cleanup();
+      this.controller = new AbortController();
+      const { signal } = this.controller;
+      const slides = [...this.querySelectorAll('.banner-slide')];
+      const selectors = [...this.querySelectorAll('[data-slide-to]')];
+      const navigation = this.querySelector('.banner-navigation');
+      const counter = this.querySelector('[data-current]');
+      if (slides.length < 2 || selectors.length !== slides.length || !navigation || !counter) return;
+
+      let current = 0;
+      let touchStart;
+      let request = 0;
+      let manuallyStopped = false;
+      let hovered = this.matches(':hover');
+      let focused = this.contains(document.activeElement);
+      let visible = false;
+      const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      slides.forEach((slide, index) => {
+        slide.hidden = false;
+        slide.classList.toggle('is-active', index === 0);
+        slide.inert = index !== 0;
+        if (index === 0) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+      });
+      selectors.forEach((selector, index) => {
+        if (index === 0) selector.setAttribute('aria-current', 'true');
+        else selector.removeAttribute('aria-current');
+      });
+      counter.textContent = '01';
+      this.dataset.enhanced = 'true';
+      navigation.hidden = false;
+
+      const clearTimer = () => {
+        if (this.timer !== undefined) window.clearTimeout(this.timer);
+        this.timer = undefined;
+      };
+      const canPlay = () => !manuallyStopped && !hovered && !focused && visible && !document.hidden && !motion.matches;
+      const schedule = () => {
+        clearTimer();
+        if (canPlay()) this.timer = window.setTimeout(() => show(current + 1), 5000);
+      };
+      const commit = (target, manual) => {
+        if (target === current) { schedule(); return; }
+        // Uma troca manual não deixa o foco em um CTA que ficará inerte.
+        if (manual && slides[current].contains(document.activeElement)) {
+          selectors[target].focus({ preventScroll: true });
+        }
+        slides.forEach((slide, slideIndex) => {
+          const active = slideIndex === target;
+          slide.classList.toggle('is-active', active);
+          slide.inert = !active;
+          if (active) slide.removeAttribute('aria-hidden');
+          else slide.setAttribute('aria-hidden', 'true');
+        });
+        selectors.forEach((selector, selectorIndex) => {
+          if (selectorIndex === target) selector.setAttribute('aria-current', 'true');
+          else selector.removeAttribute('aria-current');
+        });
+        current = target;
+        counter.textContent = String(current + 1).padStart(2, '0');
+        schedule();
+      };
+      const show = (index, manual = false) => {
+        const target = (index + slides.length) % slides.length;
+        if (manual) manuallyStopped = true;
+        clearTimer();
+        const ticket = ++request;
+        const image = slides[target].querySelector('img');
+        const finish = () => {
+          if (signal.aborted || ticket !== request) return;
+          if (!manual && !canPlay()) { schedule(); return; }
+          commit(target, manual);
+        };
+        if (image?.complete && image.naturalWidth) { finish(); return; }
+        if (!image?.decode) { finish(); return; }
+        image.decode().catch(() => {}).then(() => {
+          finish();
+        });
+      };
+
+      this.querySelector('[data-previous]')?.addEventListener('click', () => show(current - 1, true), { signal });
+      this.querySelector('[data-next]')?.addEventListener('click', () => show(current + 1, true), { signal });
+      selectors.forEach((selector, index) => selector.addEventListener('click', () => show(index, true), { signal }));
+      this.addEventListener('mouseenter', () => { hovered = true; schedule(); }, { signal });
+      this.addEventListener('mouseleave', () => { hovered = false; schedule(); }, { signal });
+      this.addEventListener('focusin', () => { focused = true; schedule(); }, { signal });
+      this.addEventListener('focusout', (event) => {
+        if (event.relatedTarget && this.contains(event.relatedTarget)) return;
+        focused = false;
+        schedule();
+      }, { signal });
+      document.addEventListener('visibilitychange', schedule, { signal });
+      window.addEventListener('pagehide', clearTimer, { signal });
+      window.addEventListener('pageshow', schedule, { signal });
+      motion.addEventListener?.('change', schedule, { signal });
+      if ('IntersectionObserver' in window) {
+        this.observer = new IntersectionObserver(([entry]) => {
+          visible = Boolean(entry?.isIntersecting);
+          schedule();
+        }, { threshold: 0.01 });
+        this.observer.observe(this);
+      } else { visible = true; schedule(); }
+      this.addEventListener('touchstart', (event) => {
+        const touch = event.changedTouches[0];
+        touchStart = touch ? { x: touch.clientX, y: touch.clientY } : undefined;
+      }, { passive: true, signal });
+      this.addEventListener('touchend', (event) => {
+        const touch = event.changedTouches[0];
+        if (!touchStart || !touch) return;
+        const deltaX = touch.clientX - touchStart.x;
+        const deltaY = touch.clientY - touchStart.y;
+        touchStart = undefined;
+        if (Math.abs(deltaX) < 50 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
+        show(current + (deltaX < 0 ? 1 : -1), true);
+      }, { passive: true, signal });
+    }
+
+    cleanup() {
+      this.controller?.abort();
+      this.observer?.disconnect();
+      this.observer = undefined;
+      if (this.timer !== undefined) window.clearTimeout(this.timer);
+      this.timer = undefined;
+    }
+
+    disconnectedCallback() { this.cleanup(); }
+  }
+
+  if (!customElements.get('mvm-banner-carousel')) customElements.define('mvm-banner-carousel', MvmBannerCarousel);
+</script>

@@ -1,0 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import { getWhatsAppUrl } from '../config/contact.js';
+import institutional from '../assets/images/banners/institucional.png';
+import safety from '../assets/images/banners/seguranca.png';
+import medicine from '../assets/images/banners/medicina.png';
+import onsite from '../assets/images/banners/inloco.png';
+
+const { banner, heading = 'h2', priority = false, id } = Astro.props;
+const Heading = heading;
+const images = { institutional, safety, medicine, onsite };
+---
+<Image
+  class="banner-image"
+  src={images[banner.key]}
+  alt=""
+  widths={[720, 960, 1280, 1600, 1774]}
+  sizes="(max-width: 38rem) 340vw, (max-width: 52rem) 190vw, 100vw"
+  format="webp"
+  quality={85}
+  loading="eager"
+  fetchpriority={priority ? 'high' : 'low'}
+  decoding="async"
+/>
+<div class="banner-shade" aria-hidden="true"></div>
+<div class="container banner-content">
+  <div class="banner-copy">
+    <p class="banner-eyebrow">{banner.eyebrow}</p>
+    <Heading id={id}>{banner.title}</Heading>
+    <p class="banner-description">{banner.description}</p>
+    <a
+      class="banner-cta"
+      href={banner.message ? getWhatsAppUrl(banner.message) : banner.href}
+      target={banner.message ? '_blank' : undefined}
+      rel={banner.message ? 'noopener noreferrer' : undefined}
+    >
+      <span>{banner.cta}</span>
+      <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6" /></svg>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import doctor from '../assets/images/Profissional de saúde com tablet-1.png';
+import exam from '../assets/images/Medição de pressão no atendimento ocupacional-2.png';
+import collaboration from '../assets/images/Colaboração em segurança e saúde ocupacional-3.png';
+
+const { variant, reveal = false } = Astro.props;
+const photos = {
+  medicine: { src: doctor, alt: 'Imagem ilustrativa de uma profissional de saúde com jaleco e tablet.' },
+  'medicine-detail': { src: exam, alt: 'Imagem ilustrativa de uma medição de pressão arterial em atendimento ocupacional.' },
+  onsite: { src: exam, alt: 'Imagem ilustrativa de uma medição de pressão arterial em atendimento ocupacional.' },
+  'safety-detail': { src: collaboration, alt: 'Imagem ilustrativa de duas pessoas analisando informações, com um capacete de segurança sobre a mesa.' },
+};
+const photo = photos[variant];
+---
+<figure class:list={['service-visual', `service-visual--${variant}`]} data-motion={reveal ? 'reveal' : undefined}>
+  <div class="visual-frame">
+    {photo ? (
+      <Image src={photo.src} alt={photo.alt} widths={[480, 720, 1080]} sizes="(max-width: 52rem) calc(100vw - 32px), 560px" loading={reveal ? 'lazy' : 'eager'} />
+    ) : (
+      <div class="visual-placeholder" role="img" aria-label="Imagem provisória para avaliação técnica em ambiente de trabalho">
+        <Icon name="helmet" />
+      </div>
+    )}
+  </div>
+</figure>
+
+<style>
+  .service-visual { display: flex; flex-direction: column; width: 100%; height: 100%; min-width: 0; }
+  .visual-frame { position: relative; flex: 1; min-height: 260px; overflow: hidden; border-radius: 16px; background: #ededed; }
+  .visual-frame :global(img) { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+  .service-visual--medicine .visual-frame { background: #e9e9e9; }
+  .service-visual--medicine .visual-frame :global(img) { object-fit: contain; object-position: center bottom; }
+  .visual-placeholder { position: relative; display: grid; place-items: center; width: 100%; height: 100%; min-height: 260px; overflow: hidden; color: var(--cor-preto); background: linear-gradient(145deg, #e9e9e9, #f7f7f7); }
+  .visual-placeholder::before { content: ''; position: absolute; width: 60%; aspect-ratio: 1; border: 1px solid #d0d0d0; border-radius: 50%; }
+  .visual-placeholder::after { content: ''; position: absolute; right: 8%; bottom: 12%; width: 48px; height: 3px; background: var(--cor-vermelho-destaque); }
+  .visual-placeholder :global(svg) { position: relative; z-index: 1; width: 80px; height: 80px; stroke-width: 1.2; }
+  @media (max-width: 52rem) {
+    .service-visual { height: auto; }
+    .visual-frame { flex: none; min-height: 0; aspect-ratio: 4 / 3; }
+    .visual-frame :global(img) { object-fit: contain; }
+    .visual-placeholder { min-height: 0; }
+  }
+</style>

@@ -1,0 +1,56 @@
+---
+import InternalLayout from '../../layouts/InternalLayout.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import BannerCarousel from '../../components/BannerCarousel.astro';
+import { serviceSlides } from '../../config/bannerSlides.js';
+import ServiceCards from '../../components/ServiceCards.astro';
+import SegmentCards from '../../components/SegmentCards.astro';
+import ContactButton from '../../components/ContactButton.astro';
+import Icon from '../../components/Icon.astro';
+import ServiceVisual from '../../components/ServiceVisual.astro';
+---
+<InternalLayout
+  title="Serviços de segurança e medicina ocupacional | MVM"
+  description="Segurança do trabalho, medicina ocupacional e exames médicos com atendimento personalizado. Conheça a modalidade in loco e consulte a disponibilidade na sua região."
+>
+  <section aria-labelledby="services-page-title">
+    <h1 id="services-page-title" class="visually-hidden">Serviços de segurança e medicina ocupacional da MVM</h1>
+    <BannerCarousel id="services-banner" label="Destaques dos serviços" slides={serviceSlides} />
+  </section>
+
+  <section class="section services" aria-labelledby="solutions-title">
+    <div class="container">
+      <SectionTitle id="solutions-title">Conheça nossas soluções e a modalidade in loco.</SectionTitle>
+      <ServiceCards />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="segments-title">
+    <div class="container">
+      <SectionTitle id="segments-title">Segmentos atendidos</SectionTitle>
+      <SegmentCards />
+    </div>
+  </section>
+
+  <section class="section split-section service-personalized" aria-labelledby="personalized-title">
+    <div class="container split-grid">
+      <div class="split-copy">
+        <SectionTitle id="personalized-title">Atendimento que considera as necessidades da sua empresa.</SectionTitle>
+        <div class="editorial-copy" data-motion="reveal">
+          <p>O atendimento em segurança do trabalho é personalizado por projeto. Na medicina ocupacional, o atendimento médico também considera as necessidades de cada empresa.</p>
+          <p>A modalidade in loco permite realizar exames dentro da empresa do cliente, reduzindo os deslocamentos da equipe. Consulte a disponibilidade para sua localidade.</p>
+          <a class="text-button" href="/servicos/atendimento-in-loco/">Conheça o atendimento in loco <Icon name="arrow" /></a>
+        </div>
+      </div>
+      <ServiceVisual variant="safety-detail" reveal />
+    </div>
+  </section>
+
+  <section id="contato" class="contact-section" aria-labelledby="contact-title">
+    <div class="container contact-content">
+      <h2 id="contact-title" data-motion="reveal">Não sabe qual solução sua empresa precisa?</h2>
+      <p data-motion="reveal">Converse com a MVM sobre as necessidades da sua empresa.</p>
+      <div data-motion="reveal"><ContactButton label="Falar com a MVM" variant="light" icon="whatsapp" /></div>
+    </div>
+  </section>
+</InternalLayout>

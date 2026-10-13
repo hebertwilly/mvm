@@ -1,0 +1,54 @@
+.internal-page .coverage-grid { align-items: center; }
+.coverage-states { margin-top: 20px; font-weight: 700; color: var(--cor-preto); }
+.section-kicker { display: inline-flex; align-items: center; gap: 14px; margin-bottom: 18px; color: var(--cor-vermelho-destaque); font-size: 12px; font-weight: 750; letter-spacing: .14em; }
+.section-kicker::after { content: ''; width: 40px; height: 2px; background: currentColor; }
+.contact-opening { padding-block: clamp(52px, 6vw, 82px); background: linear-gradient(115deg, #fff 52%, #f3f3f3 100%); }
+.contact-opening-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); align-items: center; gap: clamp(32px, 5vw, 80px); }
+.contact-opening-inner { min-width: 0; }
+.contact-opening h1 { max-width: 700px; }
+.contact-opening p { max-width: 620px; margin-top: 20px; font-size: clamp(17px, 1.4vw, 20px); }
+.contact-opening .button { margin-top: 26px; }
+.contact-opening-photo { min-width: 0; }
+.contact-opening-photo img { width: 100%; height: clamp(280px, 27vw, 390px); object-fit: cover; object-position: center; border-radius: 12px; }
+.contact-topic-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--grid-gap); }
+.contact-topic-card { display: flex; flex-direction: column; min-height: 205px; height: 100%; background: var(--cor-branco); transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease; }
+.contact-topic-card h3 { max-width: 170px; margin-top: auto; margin-bottom: 0; }
+.contact-topic-card .topic-arrow { align-self: end; width: 24px; height: 24px; color: var(--cor-vermelho-destaque); transition: transform 250ms ease; }
+.card.contact-topic-card:hover { translate: none; box-shadow: none; }
+.contact-topic-card:focus-visible { outline: 3px solid var(--cor-vermelho-destaque); outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) {
+  .card.contact-topic-card:hover { transform: translateY(-4px); border-color: #d9d9d9; box-shadow: 0 8px 24px rgb(20 20 20 / 8%); }
+  .contact-topic-card:hover .topic-arrow { transform: translateX(3px); }
+}
+.contact-info-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 90px); }
+.contact-info-grid > div + div { padding-left: clamp(24px, 4vw, 56px); border-left: 1px solid #e5e5e5; }
+.contact-info-grid .coverage-map { max-width: 460px; margin-top: 20px; }
+.contact-channel { display: flex; align-items: start; gap: 16px; }
+.contact-channel .channel-icon { width: 32px; height: 32px; color: var(--cor-vermelho-destaque); }
+.contact-channel a { text-decoration: underline; text-underline-offset: 4px; }
+.office-heading { display: flex; align-items: start; justify-content: space-between; gap: 24px; }
+.office-heading .section-title { margin-bottom: 16px; }
+.office-heading address { font-style: normal; color: var(--cor-texto-secundario); }
+.office-heading .button { flex-shrink: 0; }
+.office-map-fallback { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 170px; margin-top: 28px; padding: 28px; border: 1px solid #e5e5e5; border-radius: 16px; background: #fff; }
+.instagram-content { max-width: 1200px; }
+.instagram-content > p { max-width: 490px; }
+.instagram-content .instagram-handle { margin-bottom: 12px; color: var(--cor-vermelho-destaque); font-weight: 750; }
+.instagram-content .button { margin-top: 24px; }
+@media (max-width: 68rem) { .contact-topic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 52rem) {
+  .contact-opening-grid { grid-template-columns: 1fr; }
+  .contact-opening-photo { display: none; }
+  .contact-info-grid { grid-template-columns: 1fr; }
+  .contact-info-grid > div + div { padding-left: 0; border-left: 0; }
+  .contact-topic-card { min-height: 180px; }
+}
+@media (max-width: 38rem) {
+  .contact-topic-grid { grid-template-columns: 1fr; }
+  .contact-topic-card { min-height: 128px; }
+  .office-heading, .office-map-fallback { flex-direction: column; align-items: flex-start; }
+  .office-map-fallback { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card.contact-topic-card:hover, .contact-topic-card:hover .topic-arrow { transform: none; }
+}

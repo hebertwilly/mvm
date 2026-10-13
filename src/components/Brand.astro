@@ -1,0 +1,8 @@
+---
+const { compact = false } = Astro.props;
+---
+
+<a class="brand" href="/" aria-label="MVM Segurança e Medicina Ocupacional — início">
+  <span class="brand-word">MVM</span>
+  <span class="brand-description">{compact ? 'Segurança e Medicina Ocupacional' : <>Segurança e<br />Medicina Ocupacional</>}</span>
+</a>

@@ -1,0 +1,129 @@
+---
+import InternalLayout from '../../layouts/InternalLayout.astro';
+import BannerSingle from '../../components/BannerSingle.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import HistoryTimeline from '../../components/HistoryTimeline.astro';
+import CoverageMap from '../../components/CoverageMap.astro';
+import StructureGallery from '../../components/StructureGallery.astro';
+import ContactButton from '../../components/ContactButton.astro';
+import Icon from '../../components/Icon.astro';
+import { Image } from 'astro:assets';
+import about from '../../assets/images/Colaboração em segurança e saúde ocupacional-3.png';
+import history from '../../assets/images/banners/seguranca.png';
+import future from '../../assets/images/proximo-capitulo-provisorio.png';
+import institutional from '../../assets/images/banners/institucional.png';
+import medicine from '../../assets/images/banners/medicina.png';
+import onsite from '../../assets/images/banners/inloco.png';
+import exam from '../../assets/images/Medição de pressão no atendimento ocupacional-2.png';
+import '../../styles/about-contact.css';
+import '../../styles/about-contact-fidelity.css';
+
+const banner = {
+  key: 'institutional', eyebrow: 'SOBRE NÓS',
+  title: 'Conhecimento técnico e cuidado próximo da sua empresa.',
+  description: 'Segurança do trabalho e medicina ocupacional com clientes em São Paulo e no Paraná.',
+  cta: 'Fale conosco', message: 'general',
+  desktopPosition: 'center center', mobilePosition: '77% center',
+};
+const ways = [
+  { icon: 'people', title: 'Atendimento personalizado', text: 'Entendemos as necessidades de cada empresa para planejar o atendimento conforme sua realidade.' },
+  { icon: 'operation', title: 'Proximidade com a operação do cliente', text: 'Conversamos sobre o contexto de cada projeto e acompanhamos as demandas de segurança e saúde ocupacional.' },
+  { icon: 'location', title: 'Atendimento in loco', text: 'Realizamos exames médicos dentro da empresa do cliente, conforme a possibilidade de atendimento.' },
+];
+// Prévia visual provisória. Substituir por seis fotografias reais da MVM antes da publicação.
+const structurePhotos = [
+  { src: institutional.src, alt: 'Ambiente de trabalho com profissionais', caption: 'Ambiente de trabalho' },
+  { src: medicine.src, alt: 'Profissional de saúde em ambiente de atendimento', caption: 'Atendimento ocupacional' },
+  { src: exam.src, alt: 'Medição de pressão arterial', caption: 'Cuidado com a saúde' },
+  { src: history.src, alt: 'Profissionais em ambiente industrial', caption: 'Ambiente industrial' },
+  { src: about.src, alt: 'Profissionais em reunião de trabalho', caption: 'Planejamento' },
+  { src: onsite.src, alt: 'Atendimento médico em ambiente de trabalho', caption: 'Atendimento no local' },
+];
+---
+<InternalLayout
+  title="Sobre a MVM | Segurança e Medicina Ocupacional"
+  description="Conheça a história da MVM, fundada por Mayara Moraes em 2019, e seu atendimento em segurança e medicina ocupacional."
+>
+  <BannerSingle banner={banner} />
+
+  <section class="section about-intro" aria-labelledby="about-intro-title">
+    <div class="container split-grid">
+      <div class="split-copy">
+        <span class="reference-kicker">SOBRE NÓS</span>
+        <SectionTitle id="about-intro-title">Quem é a MVM</SectionTitle>
+        <div class="editorial-copy" data-motion="reveal">
+          <p>A MVM Segurança e Medicina Ocupacional atua desde 2019 com projetos de segurança do trabalho, atendimento médico e exames médicos.</p>
+          <p>Atendemos indústrias, empresas do agronegócio e construtoras. Hoje, temos clientes em São Paulo e no Paraná e consideramos as necessidades de cada empresa.</p>
+        </div>
+      </div>
+      <figure class="section-photo" data-motion="reveal">
+        <Image src={about} alt="Imagem ilustrativa de profissionais analisando informações em uma mesa." widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="section services" aria-labelledby="story-title">
+    <div class="container split-grid about-story-grid">
+      <div class="split-copy">
+        <span class="reference-kicker">NOSSA TRAJETÓRIA</span>
+        <SectionTitle id="story-title">Nossa história</SectionTitle>
+        <div class="editorial-copy" data-motion="reveal">
+          <p>A MVM foi fundada por Mayara Moraes em 2019. Ao trabalhar como auditora interna, ela identificou demandas de segurança do trabalho relacionadas à certificação no setor têxtil. Com formação na área, iniciou sua atuação nesse mercado.</p>
+          <p>Em 2022, a clínica surgiu acompanhando o aumento da demanda e das necessidades relacionadas ao eSocial, ampliando a atuação em medicina ocupacional.</p>
+        </div>
+      </div>
+      <figure class="section-photo about-story-photo" data-motion="reveal"><Image src={history} alt="Profissionais em ambiente industrial" widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" /></figure>
+    </div>
+  </section>
+
+  <HistoryTimeline />
+
+  <section class="section services" aria-labelledby="ways-title">
+    <div class="container">
+      <span class="reference-kicker">NOSSA ESSÊNCIA</span>
+      <SectionTitle id="ways-title">Como trabalhamos</SectionTitle>
+      <div class="card-grid">
+        {ways.map(({ icon, title, text }) => (
+          <article class="card advantage-card" data-motion="card">
+            <Icon name={icon} class="card-icon" />
+            <h3>{title}</h3><p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="coverage-title">
+    <div class="container split-grid coverage-grid">
+      <div class="split-copy">
+        <span class="reference-kicker">ABRANGÊNCIA</span>
+        <SectionTitle id="coverage-title">Onde atuamos</SectionTitle>
+        <p data-motion="reveal">Hoje, a MVM atende clientes em São Paulo e no Paraná, com soluções personalizadas para diferentes operações. Para atendimento em outras localidades, converse com nossa equipe.</p>
+        <p class="coverage-legend"><span aria-hidden="true"></span>Estados com clientes atendidos atualmente</p>
+        <p class="coverage-states">São Paulo (SP) · Paraná (PR)</p>
+      </div>
+      <CoverageMap />
+    </div>
+  </section>
+
+  <StructureGallery photos={structurePhotos} />
+
+  <section class="section services" aria-labelledby="future-title">
+    <div class="container split-grid about-future-grid">
+      <div class="split-copy">
+        <span class="reference-kicker">NOSSO FUTURO</span>
+        <SectionTitle id="future-title">Nosso próximo capítulo</SectionTitle>
+        <p data-motion="reveal">Queremos ser referência nas regiões em que atuamos, com qualidade, agilidade e uma atuação que contribua para a gestão de custos dos nossos clientes.</p>
+      </div>
+      <figure class="section-photo about-future-photo" data-motion="reveal"><Image src={future} alt="Estrada seguindo até o horizonte" widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" /></figure>
+    </div>
+  </section>
+
+  <section class="contact-section" aria-labelledby="about-contact-title">
+    <div class="container contact-content">
+      <h2 id="about-contact-title" data-motion="reveal">Vamos conhecer as necessidades da sua empresa?</h2>
+      <p data-motion="reveal">Converse com a equipe da MVM sobre sua demanda.</p>
+      <div data-motion="reveal"><ContactButton label="Fale conosco" variant="light" icon="whatsapp" /></div>
+    </div>
+  </section>
+</InternalLayout>

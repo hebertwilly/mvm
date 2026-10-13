@@ -1,0 +1,33 @@
+# Dependências e saída gerada
+node_modules/
+dist/
+.astro/
+.npm-cache/
+referencias/
+
+# Arquivos temporários de testes e navegadores
+.tmp-*
+.tmp-*/
+.cache/
+playwright-report/
+test-results/
+
+# Logs
+*.log
+
+# Variáveis de ambiente locais
+.env
+.env.*
+!.env.example
+
+# Arquivos de instruções locais
+AGENTS.md
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Configurações de editores
+.vscode/
+.idea/

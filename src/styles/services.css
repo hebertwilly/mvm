@@ -1,0 +1,27 @@
+/* Complementos exclusivos das páginas internas; tokens e componentes da Home. */
+.internal-page .editorial-row { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+.internal-page .editorial-row > * { min-width: 0; }
+.internal-page .editorial-row .section-title { max-width: 440px; margin-bottom: 0; }
+.internal-page .editorial-copy { display: grid; gap: 16px; }
+.internal-page .editorial-copy .text-button { justify-self: start; }
+.internal-page .segment-cards { padding: 0; list-style: none; }
+.internal-page .segment-cards h3 { margin-bottom: 0; }
+.internal-page .service-related-grid, .internal-page .situation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.internal-page .service-situation { background: var(--cor-branco); }
+.internal-page .service-how .service-visual { max-width: 560px; justify-self: end; }
+.internal-page .service-personalized { padding-bottom: var(--section-space); }
+.internal-page .faq-container { max-width: 900px; }
+.internal-page .faq-list { display: grid; gap: 16px; }
+.internal-page .faq-item { padding: 0 24px; border: 1px solid #e8e8e8; border-radius: 16px; background: var(--cor-branco); }
+.internal-page .faq-item summary { min-height: 56px; padding-block: 16px; font-weight: 700; cursor: pointer; }
+.internal-page .faq-item summary::marker { color: var(--cor-vermelho-destaque); }
+.internal-page .faq-item p { padding-block: 0 24px; }
+
+@media (max-width: 52rem) {
+  .internal-page .editorial-row { grid-template-columns: 1fr; gap: 24px; }
+  .internal-page .service-how .service-visual, .internal-page .service-personalized .service-visual { height: auto; }
+}
+@media (max-width: 38rem) {
+  .internal-page .service-related-grid, .internal-page .situation-grid { grid-template-columns: 1fr; }
+  .internal-page .faq-item { padding-inline: 16px; }
+}
