@@ -5,6 +5,7 @@ import WhatsAppContact from '../components/WhatsAppContact.astro';
 const {
   title = 'MVM Segurança e Medicina Ocupacional',
   description = 'Segurança e medicina ocupacional com atendimento personalizado.',
+  showFloatingContact = true,
 } = Astro.props;
 ---
 
@@ -18,6 +19,6 @@ const {
   </head>
   <body>
     <slot />
-    <WhatsAppContact />
+    {showFloatingContact && <WhatsAppContact />}
   </body>
 </html>

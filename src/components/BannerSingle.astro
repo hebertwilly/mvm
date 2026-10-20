@@ -4,6 +4,6 @@ import '../styles/banner-carousel.css';
 
 const { banner } = Astro.props;
 ---
-<section class="banner-single" aria-labelledby="service-title" style={`--desktop-position: ${banner.desktopPosition}; --mobile-position: ${banner.mobilePosition};`}>
+<section class:list={['banner-single', banner.className]} aria-labelledby="service-title" style={`--desktop-position: ${banner.desktopPosition}; --mobile-position: ${banner.mobilePosition};`}>
   <BannerPanel banner={banner} heading="h1" id="service-title" priority />
 </section>

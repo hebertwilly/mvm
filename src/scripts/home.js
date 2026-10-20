@@ -135,6 +135,59 @@ async function initialize() {
         onLeave: (items) => context.reveal(items, 0.15),
         onLeaveBack: (items) => context.reset(items),
       }));
+      const counters = [...document.querySelectorAll('[data-counter]')];
+      const countTweens = new Map();
+      const renderCount = (card, progress) => {
+        const target = Number(card.dataset.counter);
+        const current = Math.round(target * progress);
+        const value = card.querySelector('[data-count-value]');
+        if (target === 50000) {
+          value.textContent = progress >= 1 ? '+50 mil' : current < 1000
+            ? String(current) : `${(current / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} mil`;
+        } else if (card.dataset.counterFrom) {
+          value.textContent = `${current} ${current === 1 ? 'ano' : 'anos'}`;
+          card.querySelector('[data-count-years]').textContent = `${card.dataset.counterFrom} — ${Number(card.dataset.counterFrom) + current}`;
+        } else value.textContent = String(current);
+      };
+      const resetCount = (card) => {
+        const rect = card.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) return;
+        countTweens.get(card)?.kill();
+        countTweens.delete(card);
+        card.dataset.counted = 'false';
+        renderCount(card, 0);
+      };
+      const animateCount = (card, index) => {
+        if (card.dataset.counted === 'true') return;
+        card.dataset.counted = 'true';
+        const state = { progress: 0 };
+        const delay = window.matchMedia('(max-width: 38rem)').matches ? 0 : index * 0.12;
+        const tween = gsap.to(state, {
+          progress: 1, duration: 1.8, delay, ease: 'power2.out',
+          onStart: () => renderCount(card, 0),
+          onUpdate: () => renderCount(card, state.progress),
+          onComplete: () => renderCount(card, 1),
+        });
+        countTweens.set(card, tween);
+      };
+      counters.forEach((card, index) => triggers.push(ScrollTrigger.create({
+        trigger: card, start: 'top bottom', end: 'bottom top',
+        onEnter: () => animateCount(card, index),
+        onEnterBack: () => animateCount(card, index),
+        onLeave: () => resetCount(card),
+        onLeaveBack: () => resetCount(card),
+      })));
+      listeners.signal.addEventListener('abort', () => {
+        countTweens.forEach((tween) => tween.kill());
+        counters.forEach((card) => {
+          const value = card.querySelector('[data-count-value]');
+          const target = Number(card.dataset.counter);
+          value.textContent = target === 50000 ? '+50 mil'
+            : card.dataset.counterFrom ? `${target} ${target === 1 ? 'ano' : 'anos'}` : String(target);
+          if (card.dataset.counterFrom) card.querySelector('[data-count-years]').textContent = `${card.dataset.counterFrom} — ${card.dataset.counterTo}`;
+          delete card.dataset.counted;
+        });
+      }, { once: true });
       // Só habilita o fade após criar todos os triggers com sucesso.
       // Se o layout mudou durante o import, preserva o que já está na primeira dobra.
       pending.filter((element) => element.getBoundingClientRect().top < window.innerHeight).forEach(show);

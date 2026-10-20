@@ -6,6 +6,8 @@ import ServiceCards from '../components/ServiceCards.astro';
 import ServiceVisual from '../components/ServiceVisual.astro';
 import ContactButton from '../components/ContactButton.astro';
 import BannerSingle from '../components/BannerSingle.astro';
+import Icon from '../components/Icon.astro';
+import ServiceInquiryLink from '../components/ServiceInquiryLink.astro';
 import { individualBanners } from '../config/bannerSlides.js';
 import { services } from '../config/services.js';
 
@@ -18,7 +20,7 @@ const related = services.filter(({ slug }) => slug !== service.slug);
   <section class="section editorial-section" aria-labelledby="what-title">
     <div class="container editorial-row">
       <SectionTitle id="what-title">O que é</SectionTitle>
-      <div class="editorial-copy" data-motion="reveal"><p>{service.what}</p></div>
+      <div class="editorial-copy" data-motion="reveal"><p>{service.what}</p><ServiceInquiryLink message={service.message} /></div>
     </div>
   </section>
 
@@ -32,6 +34,25 @@ const related = services.filter(({ slug }) => slug !== service.slug);
       </div>
     </div>
   </section>
+
+  {service.details && <section class:list={['section', 'services', 'service-details-section', { 'service-details-section--exams': service.slug === 'medicina-ocupacional' }]} aria-labelledby="details-title">
+    <div class="container">
+      {service.detailsEyebrow && <p class="service-details-eyebrow">{service.detailsEyebrow}</p>}
+      <SectionTitle id="details-title">{service.detailsTitle}</SectionTitle>
+      {service.detailsSubtitle && <p class="service-details-subtitle">{service.detailsSubtitle}</p>}
+      <div class="card-grid service-details-grid">
+        {service.details.map(({ title, text, icon }) => <article class:list={['card', 'service-detail-card']} data-motion="card">{icon && <Icon name={icon} class="service-detail-icon" />}<div><h3>{title}</h3>{text && <p>{text}</p>}</div></article>)}
+      </div>
+      <div class="service-details-cta" data-motion="reveal"><ServiceInquiryLink message={service.message} /></div>
+    </div>
+  </section>}
+
+  {service.note && <section class="section" aria-labelledby="service-note-title">
+    <div class="container editorial-row">
+      <SectionTitle id="service-note-title">{service.noteTitle}</SectionTitle>
+      <div class="editorial-copy" data-motion="reveal"><p>{service.note}</p></div>
+    </div>
+  </section>}
 
   <section class="section" aria-labelledby="audience-title">
     <div class="container">
@@ -55,6 +76,7 @@ const related = services.filter(({ slug }) => slug !== service.slug);
         <div class="editorial-copy" data-motion="reveal"><p>{service.how}</p></div>
       </div>
     )}
+    {!service.details && <div class="container service-how-cta" data-motion="reveal"><ServiceInquiryLink message={service.message} /></div>}
   </section>
 
   <section class="section services" aria-labelledby="faq-title">
@@ -82,7 +104,7 @@ const related = services.filter(({ slug }) => slug !== service.slug);
     <div class="container contact-content">
       <h2 id="contact-title" data-motion="reveal">{service.contactTitle}</h2>
       <p data-motion="reveal">{service.contactText}</p>
-      <div data-motion="reveal"><ContactButton label="Falar com a MVM" message={service.message} variant="light" icon="whatsapp" /></div>
+      <div data-motion="reveal"><ContactButton label={service.contactCta ?? 'Falar com a MVM'} message={service.contactMessage ?? service.message} variant="light" icon="whatsapp" /></div>
     </div>
   </section>
 </InternalLayout>

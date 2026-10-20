@@ -7,6 +7,7 @@ const { photos = [] } = Astro.props;
     <div class="container">
       <span class="reference-kicker">ESTRUTURA</span>
       <h2 id="structure-title" class="section-title" data-motion="reveal">Conheça a nossa estrutura</h2>
+      <p class="gallery-disclaimer">Imagens ilustrativas provisórias; não retratam as unidades ou a equipe da MVM.</p>
       <div class="gallery-grid">
         {photos.map(({ src, alt, caption }, index) => (
           <button type="button" class="gallery-item" data-gallery-item={index} aria-label={`Ampliar foto: ${caption}`}>

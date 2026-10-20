@@ -1,10 +1,11 @@
-// TEMPORÁRIO: número de teste autorizado. Substituir pelo número oficial antes
-// da publicação, com DDI e DDD, apenas dígitos. Única fonte do telefone no site.
 export const contact = {
-  whatsappNumber: '5514997031879',
-  // Dados provisórios para composição da página Contato. Confirmar antes da publicação.
-  email: 'contato@mvm.example',
-  hours: 'Segunda a sexta, das 8h às 18h.',
+  name: 'MVM Segurança e Medicina Ocupacional',
+  cnpj: '34.464.745/0001-23',
+  whatsappNumber: '5514982323774',
+  phone: '(14) 98232-3774',
+  phoneUrl: 'tel:+5514982323774',
+  email: 'comercial@mvmengmed.com.br',
+  hours: 'Segunda a sexta-feira, das 7h às 17h.',
   instagram: {
     handle: '@mvmsegmed',
     url: 'https://www.instagram.com/mvmsegmed/',
@@ -12,12 +13,13 @@ export const contact = {
   messages: {
     general: 'Olá! Vim pelo site da MVM e gostaria de mais informações.',
     quote: 'Olá! Vim pelo site da MVM e gostaria de solicitar um orçamento.',
-    safety: 'Olá! Vim pelo site da MVM e gostaria de informações sobre segurança do trabalho.',
-    occupational: 'Olá! Vim pelo site da MVM e gostaria de informações sobre medicina ocupacional.',
+    safety: 'Olá! Vim pelo site da MVM e gostaria de informações sobre Segurança do Trabalho.',
+    occupational: 'Olá! Vim pelo site da MVM e gostaria de informações sobre exames ocupacionais e complementares.',
     onsite: 'Olá! Vim pelo site da MVM e gostaria de informações sobre atendimento in loco.',
-    safetyProposal: 'Olá! Vim pelo site da MVM e gostaria de solicitar uma proposta de segurança do trabalho.',
-    occupationalExams: 'Olá! Vim pelo site da MVM e gostaria de informações sobre medicina ocupacional e exames médicos.',
-    onsiteCompany: 'Olá! Vim pelo site da MVM e gostaria de informações sobre atendimento in loco na minha empresa.',
+    training: 'Olá! Vim pelo site da MVM e gostaria de informações sobre treinamentos em Segurança do Trabalho.',
+    safetyProposal: 'Olá! Vim pelo site da MVM e gostaria de solicitar uma proposta de Segurança do Trabalho.',
+    occupationalExams: 'Olá! Vim pelo site da MVM e gostaria de agendar exames ocupacionais e complementares.',
+    onsiteCompany: 'Olá! Vim pelo site da MVM e gostaria de consultar atendimento in loco na minha empresa.',
   },
 };
 

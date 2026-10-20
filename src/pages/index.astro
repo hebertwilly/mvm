@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/home-updates.css';
 import { Image } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -10,30 +11,47 @@ import ContactButton from '../components/ContactButton.astro';
 import ServiceCards from '../components/ServiceCards.astro';
 import Icon from '../components/Icon.astro';
 import { getWhatsAppUrl } from '../config/contact.js';
-import onsite from '../assets/images/Medição de pressão no atendimento ocupacional-2.png';
-import about from '../assets/images/Colaboração em segurança e saúde ocupacional-3.png';
+import { services } from '../config/services.js';
+import { coverage } from '../config/location.js';
+import onsite from '../assets/images/equipe-mvm-in-loco.png.png';
+import about1 from '../assets/images/img1.png';
+import about2 from '../assets/images/img2.png';
+import about3 from '../assets/images/img3.png';
+import about4 from '../assets/images/img4.png';
 
-const services = [
-  { icon: 'helmet', title: 'Segurança do trabalho', text: 'Projetos e orientação técnica para sua operação.', href: '/servicos/seguranca-do-trabalho/' },
-  { icon: 'medical', title: 'Medicina ocupacional', text: 'Cuidado ocupacional com atendimento personalizado.', href: '/servicos/medicina-ocupacional/' },
-  { icon: 'location', title: 'Atendimento in loco', text: 'Exames e atendimento dentro da sua empresa.', href: '/servicos/atendimento-in-loco/' },
-];
 const advantages = [
-  { icon: 'people', title: 'Atendimento personalizado', text: 'Entendemos sua realidade e indicamos as melhores soluções.' },
-  { icon: 'operation', title: 'Proximidade com sua operação', text: 'Atuação próxima, com agilidade e flexibilidade.' },
-  { icon: 'growth', title: 'Atuação desde 2019', text: 'Experiência prática e compromisso contínuo com nossos clientes.' },
+  { icon: 'people', title: 'Atendimento personalizado', text: 'Entendemos as necessidades de cada empresa para definir o escopo do atendimento.' },
+  { icon: 'operation', title: 'Agilidade e retorno próximo', text: 'Mantemos contato com a equipe durante o atendimento.' },
+  { icon: 'growth', title: 'Acompanhamento das ações', text: 'O acompanhamento segue os serviços e o escopo definidos com a empresa.' },
 ];
 const steps = [
-  { title: 'Contato', text: 'Você entra em contato pelo WhatsApp.' },
-  { title: 'Avaliação', text: 'Entendemos sua demanda e a realidade da sua empresa.' },
-  { title: 'Proposta', text: 'Apresentamos uma solução personalizada.' },
-  { title: 'Atendimento', text: 'Realizamos o atendimento conforme o escopo contratado.' },
+  { icon: 'message', title: 'Contato', text: 'Você entra em contato pelo WhatsApp e apresenta a necessidade da sua empresa.' },
+  { icon: 'clipboard', title: 'Levantamento', text: 'Conhecemos a realidade da empresa, as funções dos colaboradores e os documentos existentes para entender a demanda.' },
+  { icon: 'document', title: 'Proposta', text: 'Definimos a proposta, o escopo dos serviços e o agendamento conforme as necessidades identificadas.' },
+  { icon: 'operation', title: 'Execução', text: 'Realizamos os serviços contratados conforme o planejamento alinhado com a sua empresa.' },
+  { icon: 'check', title: 'Acompanhamento', text: 'Acompanhamos as ações conforme o serviço contratado e o escopo definido.' },
+];
+const numbers = [
+  { icon: 'companies', target: 328, value: '328', label: 'empresas atendidas atualmente' },
+  { icon: 'clipboard', target: 50000, value: '+50 mil', label: 'projetos executados', detail: 'Segurança do Trabalho, avaliações de riscos e acompanhamento de planos de ação.' },
+  { icon: 'calendar', target: 7, value: '7 anos', label: 'de experiência', years: '2019 — 2026', from: 2019, to: 2026 },
+];
+const aboutPhotos = [
+  { src: about1, alt: 'Grupo da MVM reunido em ambiente interno.' },
+  { src: about2, alt: 'Equipe da MVM reunida com trabalhadores em ambiente interno.' },
+  { src: about3, alt: 'Profissionais com capacetes e equipamentos de proteção em área industrial.' },
+  { src: about4, alt: 'Profissionais com equipamentos de proteção em área industrial.' },
+];
+const testimonials = [
+  { src: '/videos/snapinsta-1792523771724.mp4', poster: '/videos/snapinsta-1792523771724-poster.jpg', width: 480, height: 854 },
+  { src: '/videos/snapinsta-1792523748546.mp4', poster: '/videos/snapinsta-1792523748546-poster.jpg', width: 720, height: 1280 },
 ];
 ---
 
 <BaseLayout
   title="MVM Segurança e Medicina Ocupacional"
-  description="Segurança e medicina ocupacional com atendimento personalizado. A MVM tem clientes em São Paulo e no Paraná; consulte outras localidades."
+  description="Segurança do Trabalho, exames ocupacionais, atendimento in loco e treinamentos. Unidades em Taguaí e Taquarituba."
+  showFloatingContact={false}
 >
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
   <Header />
@@ -64,15 +82,32 @@ const steps = [
       </div>
     </section>
 
+    <section class="section services numbers-section" aria-labelledby="numbers-title">
+      <div class="container">
+        <SectionTitle id="numbers-title">A MVM em números</SectionTitle>
+        <div class="card-grid numbers-grid">
+          {numbers.map(({ icon, target, value, label, detail, years, from, to }) => (
+            <article class="card number-card" data-motion="card" data-counter={target} data-counter-from={from} data-counter-to={to} aria-label={`${value} ${label}${years ? `, ${years}` : ''}${detail ? `. ${detail}` : ''}`}>
+              <Icon name={icon} class="number-icon" />
+              <h3 aria-hidden="true"><span class="number-value" data-count-value>{value}</span></h3>
+              <p class="number-label" aria-hidden="true">{label}</p>
+              {detail && <p class="number-detail" aria-hidden="true">{detail}</p>}
+              {years && <p class="number-years" data-count-years aria-hidden="true">{years}</p>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
     <section class="section split-section" aria-labelledby="onsite-title">
       <div class="container split-grid">
         <div class="split-copy">
           <SectionTitle id="onsite-title">Levamos o cuidado até a sua equipe.</SectionTitle>
-          <p data-motion="reveal">Realizamos exames e atendimento ocupacional dentro da sua empresa, com mais praticidade, comodidade e menos impacto na sua operação.</p>
+          <p data-motion="reveal">Levamos o atendimento ocupacional até a sua empresa, com planejamento personalizado para grupos a partir de 10 colaboradores, mediante agendamento.</p>
           <div data-motion="reveal"><ContactButton label="Consultar atendimento in loco" message="onsite" icon="location" /></div>
         </div>
-        <figure class="section-photo" data-motion="reveal">
-          <Image src={onsite} alt="Imagem ilustrativa de uma medição de pressão arterial em atendimento ocupacional." widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" />
+        <figure class="section-photo onsite-photo" data-motion="reveal">
+          <Image src={onsite} alt="Equipe da MVM em visita a uma empresa cliente" widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" />
         </figure>
       </div>
     </section>
@@ -80,14 +115,25 @@ const steps = [
     <section class="section" aria-labelledby="steps-title">
       <div class="container">
         <SectionTitle id="steps-title">Como funciona nosso atendimento</SectionTitle>
-        <ol class="steps-grid">
-          {steps.map(({ title, text }, index) => (
-            <li class="step" data-motion="card">
-              <span class="step-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-              <h3>{title}</h3><p>{text}</p>
-            </li>
-          ))}
-        </ol>
+        <div class="steps-component" data-steps>
+          <div class="steps-scroll" role="tablist" aria-label="Etapas do atendimento">
+            {steps.map(({ icon, title, text }, index) => (
+              <button class="step-tab" id={`step-tab-${index}`} type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} aria-controls="step-panel" tabindex={index === 0 ? 0 : -1} data-step={index} data-description={text} data-motion="card">
+                <span class="step-marker"><Icon name={icon} /><span class="step-number">{String(index + 1).padStart(2, '0')}</span></span>
+                <span class="step-title">{title}</span>
+              </button>
+            ))}
+          </div>
+          <div class="step-panel" id="step-panel" role="tabpanel" aria-labelledby="step-tab-0" tabindex="0" data-step-panel>
+            <h3 data-step-heading>01 — Contato</h3>
+            <p data-step-text>{steps[0].text}</p>
+          </div>
+          <noscript><ol class="steps-fallback">{steps.slice(1).map(({ title, text }, index) => <li><strong>{String(index + 2).padStart(2, '0')} — {title}</strong><p>{text}</p></li>)}</ol></noscript>
+          <details class="proposal-details" data-motion="reveal">
+            <summary>O que ter em mãos para solicitar uma proposta?</summary>
+            <p>CNPJ, número de empregados por unidade, lista de funções, documentos existentes e suas validades, motivo da contratação e localização.</p>
+          </details>
+        </div>
       </div>
     </section>
 
@@ -95,19 +141,50 @@ const steps = [
       <div class="container split-grid">
         <div class="split-copy">
           <SectionTitle id="about-title">Conheça a MVM</SectionTitle>
-          <p data-motion="reveal">Desde 2019, unimos conhecimento técnico e atendimento personalizado. Hoje, temos clientes em São Paulo e no Paraná.</p>
+          <p data-motion="reveal">{coverage.text}</p>
           <a class="text-button about-link" href="/sobre-nos/">Saiba mais sobre nós <Icon name="arrow" /></a>
         </div>
-        <figure class="section-photo" data-motion="reveal">
-          <Image src={about} alt="Imagem ilustrativa de duas pessoas analisando informações sobre segurança e saúde ocupacional." widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" />
+        <figure class="section-photo about-photo" data-motion="reveal" data-about-gallery>
+          {aboutPhotos.map(({ src, alt }, index) => <Image src={src} alt={alt} aria-hidden={index === 0 ? 'false' : 'true'} class:list={['about-slide', { 'is-active': index === 0 }]} widths={[480, 720, 960]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" decoding="async" />)}
         </figure>
+      </div>
+    </section>
+
+    <section class="section testimonials-section" aria-labelledby="testimonials-title">
+      <div class="container testimonials-layout">
+        <div class="testimonials-intro">
+          <p class="testimonials-kicker">Depoimentos</p>
+          <SectionTitle id="testimonials-title">A confiança de quem já esteve com a MVM</SectionTitle>
+          <p class="testimonials-description">Empresas de diferentes segmentos confiam na MVM para cuidar da saúde das suas equipes e manter seus ambientes de trabalho mais seguros, produtivos e em conformidade com a legislação.</p>
+          <button class="testimonials-cta" type="button" data-testimonial-start aria-controls="testimonial-video-1">
+            <span class="testimonials-cta-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z" fill="currentColor" /></svg></span>
+            <span>Assista aos depoimentos</span>
+            <Icon name="arrow" />
+          </button>
+        </div>
+        <div class="testimonials-grid">
+          {testimonials.map(({ src, poster, width, height }, index) => (
+            <article class="testimonial-card" id={`testimonial-${String(index + 1).padStart(2, '0')}`} data-motion="card">
+              <div class="testimonial-video">
+                <video id={`testimonial-video-${index + 1}`} controls preload="none" playsinline poster={poster} width={width} height={height} aria-label={`Depoimento em vídeo ${index + 1}`}>
+                  <source src={src} type="video/mp4" />
+                  Seu navegador não oferece suporte à reprodução deste vídeo.
+                </video>
+                <button class="testimonial-play" type="button" aria-label={`Reproduzir depoimento em vídeo ${index + 1}`} data-testimonial-play hidden>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 5 11 7-11 7V5Z" fill="currentColor" /></svg>
+                </button>
+              </div>
+              <h3>Depoimento {String(index + 1).padStart(2, '0')}</h3>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
 
     <section id="contato" class="contact-section" aria-labelledby="contact-title">
       <div class="container contact-content">
         <h2 id="contact-title" data-motion="reveal">Vamos cuidar da segurança e da saúde da sua empresa?</h2>
-        <p data-motion="reveal">Converse com a equipe da MVM e solicite uma proposta personalizada.</p>
+        <p data-motion="reveal">Converse com a equipe da MVM e solicite uma proposta para sua empresa.</p>
         <div data-motion="reveal"><ContactButton label="Falar com a MVM no WhatsApp" variant="light" final /></div>
         {!getWhatsAppUrl() && <p id="contact-pending" class="contact-pending">WhatsApp ainda não disponível.</p>}
       </div>
@@ -116,5 +193,11 @@ const steps = [
   <Footer />
   <script>
     import '../scripts/home.js';
+  </script>
+  <script>
+    import '../scripts/home-interactions.js';
+  </script>
+  <script>
+    import '../scripts/testimonials.js';
   </script>
 </BaseLayout>

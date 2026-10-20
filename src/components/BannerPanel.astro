@@ -12,7 +12,7 @@ const images = { institutional, safety, medicine, onsite };
 ---
 <Image
   class="banner-image"
-  src={images[banner.key]}
+  src={banner.image ?? images[banner.key]}
   alt=""
   widths={[720, 960, 1280, 1600, 1774]}
   sizes="(max-width: 38rem) 340vw, (max-width: 52rem) 190vw, 100vw"

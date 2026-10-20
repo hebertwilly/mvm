@@ -46,6 +46,12 @@
 .office-heading address { font-style: normal; color: var(--cor-texto-secundario); }
 .office-heading .button { flex-shrink: 0; }
 .office-map { display: block; width: 100%; height: clamp(280px, 32vw, 400px); margin-top: 28px; border: 0; border-radius: 12px; background: #e8e8e8; }
+.office-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
+.office-unit { min-width: 0; }
+.office-heading { align-items: flex-start; }
+.office-heading h3 { margin-bottom: 8px; }
+.office-heading .button { white-space: nowrap; }
+.office-map { height: 320px; }
 .instagram-content { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: center; gap: clamp(28px, 5vw, 68px); }
 .instagram-copy > p { max-width: 400px; }
 .instagram-handle { margin-bottom: 12px; color: var(--cor-vermelho-destaque); font-weight: 750; }
@@ -54,6 +60,10 @@
 .instagram-previews a { display: block; border-radius: 10px; overflow: hidden; }
 .instagram-previews img { width: 100%; height: clamp(170px, 19vw, 260px); object-fit: cover; }
 .instagram-previews a:focus-visible { outline: 3px solid var(--cor-vermelho-destaque); outline-offset: 4px; }
+.instagram-visit { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 240px; padding: 30px; border-radius: 16px; background: #f3f3f3; text-align: center; }
+.instagram-visit svg { width: 48px; height: 48px; margin-bottom: 14px; color: var(--cor-vermelho-destaque); }
+.instagram-visit span { font-size: 24px; font-weight: 750; }
+.instagram-visit p { margin-top: 8px; }
 .contact-final { position: relative; overflow: hidden; }
 .contact-final::after { content: ''; position: absolute; right: -80px; top: -160px; width: 460px; aspect-ratio: 1; border: 1px solid rgb(181 31 40 / 25%); border-radius: 50%; box-shadow: 0 0 0 65px rgb(181 31 40 / 4%), 0 0 0 130px rgb(181 31 40 / 3%); pointer-events: none; }
 .contact-final-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 40px; }
@@ -74,6 +84,7 @@
   .contact-info-grid { grid-template-columns: 1fr; }
   .contact-info-grid > div + div { padding-left: 0; padding-top: 28px; border-left: 0; border-top: 1px solid #e5e5e5; }
   .instagram-content { grid-template-columns: 1fr; }
+  .office-grid { grid-template-columns: 1fr; }
   .instagram-previews img { height: clamp(140px, 29vw, 240px); }
   .contact-final-content { align-items: flex-start; flex-direction: column; gap: 24px; }
 }

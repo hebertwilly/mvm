@@ -1,12 +1,12 @@
 ---
 import source from '../assets/maps/ibge-ufs.svg?raw';
 
-// Recorte do Sul/Sudeste na malha oficial do IBGE; limites e IDs permanecem originais.
-const map = source.replace(/viewBox="[^"]+"/, 'viewBox="-57 14 21 18"');
+// Malha nacional para contextualizar também a região Nordeste, sem atribuir clientes a estados específicos dela.
+const map = source;
 ---
 <figure class="coverage-map" data-coverage-map>
   <div class="coverage-map-art" set:html={map} aria-hidden="true"></div>
-  <figcaption class="visually-hidden">São Paulo e Paraná, estados com clientes atendidos atualmente, em destaque. Fonte cartográfica: IBGE, API de Malhas Geográficas.</figcaption>
+  <figcaption class="visually-hidden">São Paulo, Paraná, Rio de Janeiro e Rio Grande do Sul destacados. A MVM também informou clientes na região Nordeste, sem especificar estados. Fonte cartográfica: IBGE, API de Malhas Geográficas.</figcaption>
 </figure>
 
 <script>
@@ -27,10 +27,10 @@ const map = source.replace(/viewBox="[^"]+"/, 'viewBox="-57 14 21 18"');
   .coverage-map-art { width: 100%; }
   .coverage-map-art :global(svg) { display: block; width: 100%; height: auto; max-height: 400px; }
   .coverage-map-art :global(path) { fill: #e2e2e2; stroke: #fff; stroke-width: .035; }
-  .coverage-map-art :global(path[id="35"]), .coverage-map-art :global(path[id="41"]) { fill: var(--cor-vermelho-destaque); }
-  .coverage-map figcaption { margin-top: 4px; }
+  .coverage-map-art :global(path[id="35"]), .coverage-map-art :global(path[id="41"]), .coverage-map-art :global(path[id="33"]), .coverage-map-art :global(path[id="43"]) { fill: var(--cor-vermelho-destaque); }
+  .coverage-map figcaption { margin-top: 8px; font-size: 12px; line-height: 1.4; color: var(--cor-texto-secundario); }
   @media (prefers-reduced-motion: no-preference) {
-    .coverage-map-art :global(path[id="35"]), .coverage-map-art :global(path[id="41"]) { transition: fill 700ms ease; }
-    .coverage-map.is-pending .coverage-map-art :global(path[id="35"]), .coverage-map.is-pending .coverage-map-art :global(path[id="41"]) { fill: #e2e2e2; }
+    .coverage-map-art :global(path[id="35"]), .coverage-map-art :global(path[id="41"]), .coverage-map-art :global(path[id="33"]), .coverage-map-art :global(path[id="43"]) { transition: fill 700ms ease; }
+    .coverage-map.is-pending .coverage-map-art :global(path[id="35"]), .coverage-map.is-pending .coverage-map-art :global(path[id="41"]), .coverage-map.is-pending .coverage-map-art :global(path[id="33"]), .coverage-map.is-pending .coverage-map-art :global(path[id="43"]) { fill: #e2e2e2; }
   }
 </style>

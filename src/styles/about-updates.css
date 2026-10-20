@@ -1,0 +1,45 @@
+.about-banner .banner-shade { background: linear-gradient(90deg, rgb(0 0 0 / 55%) 0%, rgb(0 0 0 / 38%) 39%, rgb(0 0 0 / 12%) 68%, transparent 100%); }
+.about-banner .banner-image { filter: none; }
+
+.about-intro .about-team-photo { position: relative; width: 100%; max-width: 410px; aspect-ratio: 3 / 4; justify-self: end; overflow: hidden; border-radius: 16px; background: #f3f3f3; }
+.about-intro .about-team-photo .about-slide { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: contain; border-radius: 0; opacity: 0; filter: none; transition: opacity 400ms ease; }
+.about-intro .about-team-photo .about-slide.is-active { opacity: 1; }
+
+.about-story-photo { width: 100%; max-width: 390px; justify-self: end; overflow: hidden; border-radius: 16px; background: #f3f3f3; }
+.about-story-photo img { display: block; width: 100%; height: auto; max-height: 520px; object-fit: contain; object-position: center; border-radius: 16px; }
+
+.team-specialties { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow-x: clip; }
+.team-specialties::before { content: ''; position: absolute; top: 37px; inset-inline: 0; height: 1px; background: #d9d9d9; }
+.team-specialty { position: relative; z-index: 1; min-width: 0; padding-inline: 24px; }
+.team-specialty-heading { position: relative; display: grid; grid-template-rows: 74px 56px; justify-items: center; gap: 22px; width: max-content; max-width: calc(100% - var(--team-text-indent)); margin-inline-start: var(--team-text-indent); }
+.team-specialty:first-child .team-specialty-heading::before, .team-specialty:last-child .team-specialty-heading::after { content: ''; position: absolute; z-index: 1; top: 37px; width: 100vw; height: 1px; background: #fff; }
+.team-specialty:first-child .team-specialty-heading::before { right: calc(50% + 44px); }
+.team-specialty:last-child .team-specialty-heading::after { left: calc(50% + 44px); }
+.team-specialty-marker { position: relative; z-index: 2; display: grid; place-items: center; width: 74px; height: 74px; flex: none; border: 1px solid #efd5d7; border-radius: 50%; background: #fcf3f4; box-shadow: 0 0 0 7px #fff; color: var(--cor-vermelho-destaque); }
+.team-specialty-marker svg { width: 34px; height: 34px; }
+.team-specialty-copy { --team-text-indent: 18px; display: grid; grid-template-rows: 152px 1fr; width: min(100%, 300px); margin-inline: auto; }
+.team-specialty h3 { margin: 0; font-size: 20px; text-align: left; }
+.team-specialty ul { display: grid; align-content: start; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.team-specialty li { position: relative; padding-inline-start: var(--team-text-indent); color: var(--cor-texto-secundario); font-size: 15px; line-height: 1.5; }
+.team-specialty li::before { content: ''; position: absolute; top: .62em; left: 0; width: 5px; height: 5px; border-radius: 50%; background: var(--cor-vermelho-destaque); }
+
+@media (max-width: 52rem) {
+  .about-banner .banner-image { object-position: 78% center; }
+  .about-banner .banner-shade { background: linear-gradient(0deg, rgb(0 0 0 / 88%) 0%, rgb(0 0 0 / 73%) 35%, rgb(0 0 0 / 18%) 78%, transparent 100%); }
+  .about-intro .about-team-photo, .about-story-photo { justify-self: center; }
+  .team-specialties { grid-template-columns: 1fr; gap: 30px; overflow: visible; }
+  .team-specialties::before, .team-specialty:first-child .team-specialty-heading::before, .team-specialty:last-child .team-specialty-heading::after { display: none; }
+  .team-specialty { padding-inline: 0; }
+  .team-specialty:not(:last-child)::after { content: ''; position: absolute; top: 72px; bottom: -30px; left: 36px; width: 1px; background: #d9d9d9; }
+  .team-specialty-marker { width: 72px; height: 72px; margin: 0; box-shadow: 0 0 0 5px #fff; }
+  .team-specialty-copy { grid-template-columns: 72px minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 20px; width: 100%; margin: 0; }
+  .team-specialty-heading { display: contents; }
+  .team-specialty-marker { grid-column: 1; grid-row: 1 / span 2; }
+  .team-specialty h3 { grid-column: 2; grid-row: 1; align-self: start; margin: 7px 0 16px; padding-inline-start: var(--team-text-indent); }
+  .team-specialty ul { grid-column: 2; grid-row: 2; }
+}
+@media (max-width: 38rem) {
+  .about-banner .banner-image { object-position: 78% center; }
+  .about-banner .banner-shade { background: linear-gradient(0deg, rgb(0 0 0 / 91%) 0%, rgb(0 0 0 / 72%) 40%, rgb(0 0 0 / 8%) 86%, transparent 100%); }
+}
+@media (prefers-reduced-motion: reduce) { .about-intro .about-team-photo .about-slide { transition: none; } }

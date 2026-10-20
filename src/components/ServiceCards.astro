@@ -3,7 +3,7 @@ import Icon from './Icon.astro';
 import { services } from '../config/services.js';
 const { items = services } = Astro.props;
 ---
-<div class:list={['card-grid', { 'service-related-grid': items.length === 2 }]}>
+<div class:list={['card-grid', { 'service-related-grid': items.length === 2, 'service-four-grid': items.length === 4 }]}>
   {items.map(({ icon, cardTitle, cardText, title, text, href }) => (
     <article class="service-card-item" data-motion="card">
       <a class="card service-card" href={href} aria-label={`Conhecer ${cardTitle ?? title}`}>

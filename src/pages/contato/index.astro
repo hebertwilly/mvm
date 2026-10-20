@@ -5,26 +5,23 @@ import CoverageMap from '../../components/CoverageMap.astro';
 import ContactButton from '../../components/ContactButton.astro';
 import Icon from '../../components/Icon.astro';
 import { contact, getWhatsAppUrl } from '../../config/contact.js';
-import { officeAddress, officeMapEmbedUrl, officeDirectionsUrl } from '../../config/location.js';
+import { units, coverage } from '../../config/location.js';
 import { Image } from 'astro:assets';
 import hero from '../../assets/images/contato-hero-provisorio.png';
-import previewOne from '../../assets/images/banners/seguranca.png';
-import previewTwo from '../../assets/images/banners/medicina.png';
-import previewThree from '../../assets/images/banners/inloco.png';
 import '../../styles/about-contact.css';
 import '../../styles/about-contact-fidelity.css';
 
 const topics = [
-  { title: 'Segurança do trabalho', icon: 'helmet', message: 'safety' },
-  { title: 'Medicina ocupacional', icon: 'medical', message: 'occupational' },
+  { title: 'Segurança do Trabalho', icon: 'helmet', message: 'safety' },
+  { title: 'Exames ocupacionais e complementares', icon: 'medical', message: 'occupationalExams' },
   { title: 'Atendimento in loco', icon: 'location', message: 'onsite' },
-  { title: 'Outros assuntos', icon: 'message', message: 'general' },
+  { title: 'Treinamentos', icon: 'people', message: 'training' },
 ];
 const instagram = contact.instagram;
 ---
 <InternalLayout
   title="Contato | Fale com a MVM"
-  description="Converse com a MVM sobre segurança do trabalho, medicina ocupacional e atendimento in loco. Clientes em São Paulo e no Paraná; outras localidades sob consulta."
+  description="Fale com a MVM pelo WhatsApp, telefone ou e-mail. Unidades em Taguaí e Taquarituba."
 >
   <section class="contact-opening" aria-labelledby="contact-page-title">
     <Image class="contact-opening-image" src={hero} alt="" widths={[768, 1200, 1800, 2048]} sizes="100vw" loading="eager" fetchpriority="high" />
@@ -32,8 +29,20 @@ const instagram = contact.instagram;
       <div class="contact-opening-inner">
         <span class="section-kicker">CONTATO</span>
         <h1 id="contact-page-title">Vamos conversar sobre a sua empresa?</h1>
-        <p>Fale com a MVM para consultar serviços, atendimento e solicitar uma proposta.</p>
+        <p>Fale com a MVM para conhecer os serviços, alinhar o atendimento ou solicitar uma proposta.</p>
         <ContactButton label="Falar com a MVM no WhatsApp" icon="whatsapp" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="contact-faq-title">
+    <div class="container faq-container">
+      <SectionTitle id="contact-faq-title">Perguntas frequentes</SectionTitle>
+      <div class="faq-list">
+        <details class="faq-item" data-motion="reveal"><summary>Como solicitar um orçamento?</summary><p>Entre em contato pelo WhatsApp para apresentar a necessidade da sua empresa. A equipe fará o levantamento das informações para definir a proposta.</p></details>
+        <details class="faq-item" data-motion="reveal"><summary>Quais informações são necessárias para a proposta?</summary><p>Tenha em mãos CNPJ, número de empregados por unidade, lista de funções, documentos existentes e suas validades, motivo da contratação e localização.</p></details>
+        <details class="faq-item" data-motion="reveal"><summary>Onde ficam as unidades?</summary><p>Em Taguaí, na Rua Salvador Domingues de Campos, 77, Centro; e em Taquarituba, na Rua Marechal Floriano Peixoto, 896, Sala 6, Centro.</p></details>
+        <details class="faq-item" data-motion="reveal"><summary>Como consultar atendimento em outra região?</summary><p>Converse com a equipe pelo WhatsApp e informe a localização e a necessidade da sua empresa para avaliar o atendimento.</p></details>
       </div>
     </div>
   </section>
@@ -61,11 +70,12 @@ const instagram = contact.instagram;
         <SectionTitle id="channels-title">Nossos canais</SectionTitle>
         <div class="contact-channel" data-motion="reveal">
           <Icon name="whatsapp" class="channel-icon" />
-          <div><h3>WhatsApp</h3><p><a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">{contact.whatsappNumber}</a></p></div>
+          <div><h3>WhatsApp</h3><p><a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">{contact.phone}</a></p></div>
         </div>
+        <div class="contact-channel" data-motion="reveal"><Icon name="phone" class="channel-icon" /><div><h3>Telefone</h3><p><a href={contact.phoneUrl}>{contact.phone}</a></p></div></div>
         <div class="contact-channel" data-motion="reveal">
           <Icon name="mail" class="channel-icon" />
-          <div><h3>E-mail</h3><p>{contact.email}</p></div>
+          <div><h3>E-mail</h3><p><a href={`mailto:${contact.email}`}>{contact.email}</a></p></div>
         </div>
         <div class="contact-channel" data-motion="reveal">
           <Icon name="clock" class="channel-icon" />
@@ -74,7 +84,7 @@ const instagram = contact.instagram;
       </div>
       <div>
         <SectionTitle id="contact-coverage-title">Onde atendemos</SectionTitle>
-        <p data-motion="reveal">Hoje, a MVM atende clientes em São Paulo e no Paraná. Para atendimento em outras localidades, converse com nossa equipe.</p>
+        <p data-motion="reveal">{coverage.text}</p>
         <CoverageMap />
       </div>
     </div>
@@ -82,11 +92,14 @@ const instagram = contact.instagram;
 
   <section class="section services" aria-labelledby="office-title">
     <div class="container">
-      <div class="office-heading">
-        <div><SectionTitle id="office-title">Visite nosso escritório</SectionTitle><address>{officeAddress}</address></div>
-        <a class="button button--dark" href={officeDirectionsUrl} target="_blank" rel="noopener noreferrer"><Icon name="location" />Como chegar</a>
+      <SectionTitle id="office-title">Nossas unidades</SectionTitle>
+      <div class="office-grid">
+        {units.map((unit) => <article class="office-unit">
+          <div class="office-heading"><div><h3>{unit.name}</h3><address>{unit.address}</address></div>
+            <a class="button button--dark" href={unit.directionsUrl} target="_blank" rel="noopener noreferrer"><Icon name="location" />Como chegar</a></div>
+          <iframe class="office-map" title={`Mapa do Google Maps: ${unit.name}, ${unit.address}`} src={unit.embedUrl} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </article>)}
       </div>
-      <iframe class="office-map" title={`Mapa do Google Maps: ${officeAddress}`} src={officeMapEmbedUrl} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
     </div>
   </section>
 
@@ -95,22 +108,16 @@ const instagram = contact.instagram;
       <div class="instagram-copy">
         <SectionTitle id="instagram-title">Acompanhe a MVM no Instagram</SectionTitle>
         <p class="instagram-handle">{instagram.handle}</p>
-        <p>Conheça mais sobre nosso trabalho e acompanhe nossas novidades.</p>
+        <p>Acesse o perfil oficial da MVM para acompanhar suas publicações.</p>
         <a class="button button--dark" href={instagram.url} target="_blank" rel="noopener noreferrer">Ver perfil no Instagram</a>
       </div>
-      <div class="instagram-previews" aria-label="Prévia visual; acesse o perfil para ver as publicações reais">
-        {[previewOne, previewTwo, previewThree].map((preview, index) => (
-          <a href={instagram.url} target="_blank" rel="noopener noreferrer" aria-label={`Abrir perfil da MVM no Instagram — prévia ${index + 1}`}>
-            <Image src={preview} alt="" widths={[220, 360, 540]} sizes="(max-width: 52rem) 30vw, 170px" loading="lazy" />
-          </a>
-        ))}
-      </div>
+      <div class="instagram-visit"><Icon name="instagram" /><span>{instagram.handle}</span><p>Instagram oficial</p></div>
     </div>
   </section>
 
   <section class="contact-section contact-final" aria-labelledby="contact-final-title">
     <div class="container contact-final-content">
-      <div><h2 id="contact-final-title" data-motion="reveal">Sua empresa precisa de atendimento personalizado?</h2><p data-motion="reveal">Converse com a MVM sobre a necessidade da sua empresa.</p></div>
+      <div><h2 id="contact-final-title" data-motion="reveal">Como a MVM pode atender sua empresa?</h2><p data-motion="reveal">Converse com a equipe sobre o serviço e a necessidade da sua empresa.</p></div>
       <div data-motion="reveal"><ContactButton label="Conversar no WhatsApp" variant="light" icon="whatsapp" /></div>
     </div>
   </section>

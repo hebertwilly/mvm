@@ -1,0 +1,12 @@
+---
+import { getWhatsAppUrl } from '../config/contact.js';
+import Icon from './Icon.astro';
+
+const { message = 'general' } = Astro.props;
+const href = getWhatsAppUrl(message);
+---
+{href && (
+  <a class="text-button service-consult-link" href={href} target="_blank" rel="noopener noreferrer">
+    Consulte este serviço pelo WhatsApp <Icon name="whatsapp" />
+  </a>
+)}

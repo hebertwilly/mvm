@@ -1,8 +1,6 @@
 ---
 import SectionTitle from './SectionTitle.astro';
-import { Image } from 'astro:assets';
-import firstPhoto from '../assets/images/Colaboração em segurança e saúde ocupacional-3.png';
-import secondPhoto from '../assets/images/Medição de pressão no atendimento ocupacional-2.png';
+import Icon from './Icon.astro';
 ---
 <section class="section history-timeline" aria-labelledby="history-timeline-title" data-history-timeline>
   <div class="container">
@@ -13,16 +11,20 @@ import secondPhoto from '../assets/images/Medição de pressão no atendimento o
       <article class="timeline-event">
         <span class="timeline-marker" data-timeline-marker aria-hidden="true"></span>
         <div class="timeline-event-body">
-          <Image src={firstPhoto} alt="Profissionais em reunião de trabalho" widths={[200, 300]} sizes="140px" loading="lazy" />
-          <div><span class="timeline-year">2019</span><h3>Fundação da MVM</h3><p>Início da empresa a partir da experiência de Mayara Moraes e das demandas identificadas em segurança do trabalho.</p></div>
+          <span class="timeline-event-visual" aria-hidden="true"><Icon name="buildingShield" /></span>
+          <div><span class="timeline-year">2019</span><h3>Início da MVM</h3><p>Mayara Moraes funda a MVM após identificar demandas de Segurança do Trabalho no setor têxtil.</p></div>
         </div>
       </article>
       <article class="timeline-event">
         <span class="timeline-marker" data-timeline-marker aria-hidden="true"></span>
-        <div class="timeline-event-body timeline-event-body--last">
-          <div><span class="timeline-year">2022</span><h3>Expansão para a clínica</h3><p>Ampliação da atuação com o crescimento da demanda em medicina ocupacional.</p></div>
-          <Image src={secondPhoto} alt="Atendimento de saúde ocupacional" widths={[200, 300]} sizes="140px" loading="lazy" />
+        <div class="timeline-event-body">
+          <span class="timeline-event-visual" aria-hidden="true"><Icon name="medicalBag" /></span>
+          <div><span class="timeline-year">2022</span><h3>Ampliação com a clínica</h3><p>A clínica surge com o crescimento da demanda e das necessidades relacionadas ao eSocial.</p></div>
         </div>
+      </article>
+      <article class="timeline-event">
+        <span class="timeline-marker" data-timeline-marker aria-hidden="true"></span>
+        <div class="timeline-event-body"><span class="timeline-event-visual" aria-hidden="true"><Icon name="peopleShield" /></span><div><span class="timeline-year">Hoje</span><h3>Atuação atual</h3><p>Segurança do Trabalho, saúde ocupacional e atendimento próximo às empresas.</p></div></div>
       </article>
     </div>
   </div>
@@ -37,8 +39,9 @@ import secondPhoto from '../assets/images/Medição de pressão no atendimento o
     const line = root.querySelector('[data-timeline-line]');
     const progress = root.querySelector('[data-timeline-progress]');
     const markers = [...root.querySelectorAll('[data-timeline-marker]')];
+    const visuals = [...root.querySelectorAll('.timeline-event-visual')];
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const mobile = window.matchMedia('(max-width: 52rem)');
+    const mobile = window.matchMedia('(max-width: 68rem)');
     let timeline;
     let observer;
     let listeners;
@@ -47,7 +50,7 @@ import secondPhoto from '../assets/images/Medição de pressão no atendimento o
     const measure = () => {
       const box = events.getBoundingClientRect();
       const first = markers[0].getBoundingClientRect();
-      const second = markers[1].getBoundingClientRect();
+      const second = markers[markers.length - 1].getBoundingClientRect();
       const x1 = first.left + first.width / 2 - box.left;
       const y1 = first.top + first.height / 2 - box.top;
       const x2 = second.left + second.width / 2 - box.left;
@@ -63,21 +66,28 @@ import secondPhoto from '../assets/images/Medição de pressão no atendimento o
       timeline?.kill();
       timeline = undefined;
       measure();
-      gsap.set([progress, ...markers], { clearProps: 'all' });
+      gsap.set([progress, ...markers, ...visuals], { clearProps: 'all' });
       if (motion.matches) { return; }
       gsap.set(progress, mobile.matches
         ? { scaleY: 0, transformOrigin: 'center top' }
         : { scaleX: 0, transformOrigin: 'left center' });
       gsap.set(markers, { backgroundColor: '#d9d9d9' });
+      gsap.set(visuals, { opacity: .45, y: 8 });
       const scale = mobile.matches ? 'scaleY' : 'scaleX';
       timeline = gsap.timeline({ repeat: -1, paused: true });
       timeline.to(progress, { [scale]: .08, duration: .6, ease: 'power2.out' })
         .to(markers[0], { backgroundColor: '#b51f28', duration: .25 })
-        .to(progress, { [scale]: 1, duration: 1.3, ease: 'power2.inOut' })
-        .to(markers[1], { backgroundColor: '#b51f28', duration: .25 })
+        .to(visuals[0], { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, '<');
+      markers.slice(1).forEach((marker, index) => {
+        timeline.to(progress, { [scale]: (index + 1) / (markers.length - 1), duration: 1.3, ease: 'power2.inOut' })
+          .to(marker, { backgroundColor: '#b51f28', duration: .25 })
+          .to(visuals[index + 1], { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, '<');
+      });
+      timeline
         .to({}, { duration: 4 })
         .to(progress, { [scale]: 0, duration: 1.2, ease: 'power2.inOut' })
-        .to(markers, { backgroundColor: '#d9d9d9', duration: .35 }, '<');
+        .to(markers, { backgroundColor: '#d9d9d9', duration: .35 }, '<')
+        .to(visuals, { opacity: .45, y: 8, duration: .35 }, '<');
       sync();
     };
     const stop = () => {
@@ -108,24 +118,25 @@ import secondPhoto from '../assets/images/Medição de pressão no atendimento o
 </script>
 
 <style>
-  .timeline-events { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
-  .timeline-line { position: absolute; z-index: 0; top: 11px; left: 11px; width: calc(50% + var(--grid-gap) / 2); height: 2px; background: #dedede; }
+  .timeline-events { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); }
+  .timeline-line { position: absolute; z-index: 0; top: 11px; left: 11px; width: 100%; height: 2px; background: #dedede; }
   .timeline-line span { display: block; width: 100%; height: 100%; background: var(--cor-vermelho-destaque); }
   .timeline-event { position: relative; z-index: 1; padding: 36px 24px 0 0; }
-  .timeline-event-body { display: flex; align-items: center; gap: 20px; }
-  .timeline-event-body img { width: 132px; height: 90px; flex: none; object-fit: cover; border-radius: 8px; }
+  .timeline-event-body { display: flex; align-items: flex-start; gap: 16px; }
+  .timeline-event-visual { display: grid; place-items: center; width: 72px; height: 72px; flex: none; border: 1px solid #f3dfe1; border-radius: 14px; background: #fcf3f4; color: var(--cor-vermelho-destaque); }
+  .timeline-event-visual :global(svg) { width: 38px; height: 38px; }
   .timeline-event-body > div { min-width: 0; }
   .timeline-marker { position: absolute; top: 0; left: 0; width: 24px; height: 24px; border: 3px solid #fff; border-radius: 50%; background: var(--cor-vermelho-destaque); box-shadow: 0 0 0 1px #d9d9d9; }
   .timeline-year { display: block; margin-bottom: 8px; font-size: 24px; font-weight: 750; line-height: 1.2; }
   .timeline-event h3 { margin-bottom: 8px; }
   .timeline-event p { max-width: 470px; }
-  @media (max-width: 52rem) {
+  @media (max-width: 68rem) {
     .timeline-events { grid-template-columns: 1fr; gap: 28px; }
     .timeline-line { top: 12px; left: 11px; width: 2px; height: 50%; }
     .timeline-event { padding: 0 0 0 44px; }
     .timeline-year { margin-bottom: 4px; }
     .timeline-event-body { gap: 16px; }
-    .timeline-event-body img { width: 112px; height: 82px; }
+    .timeline-event-visual { width: 64px; height: 64px; }
   }
-  @media (max-width: 38rem) { .timeline-event-body { align-items: flex-start; flex-direction: column; } .timeline-event-body--last img { order: -1; } }
+  @media (max-width: 38rem) { .timeline-event-body { gap: 12px; } .timeline-event-visual { width: 56px; height: 56px; } .timeline-event-visual :global(svg) { width: 30px; height: 30px; } }
 </style>

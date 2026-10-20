@@ -7,6 +7,19 @@
 .internal-page .segment-cards { padding: 0; list-style: none; }
 .internal-page .segment-cards h3 { margin-bottom: 0; }
 .internal-page .service-related-grid, .internal-page .situation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.internal-page .service-details-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.internal-page .service-details-section--exams { background: var(--cor-branco); }
+.internal-page .service-details-section--exams .service-details-eyebrow { margin-bottom: 4px; color: var(--cor-vermelho-destaque); font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.internal-page .service-details-section--exams .section-title { max-width: none; margin-bottom: 4px; }
+.internal-page .service-details-section--exams .section-title::before { display: none; }
+.internal-page .service-details-section--exams .service-details-subtitle { margin-bottom: 28px; font-size: clamp(17px, 1.4vw, 22px); }
+.internal-page .service-details-section--exams .service-details-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.internal-page .service-details-section--exams .service-detail-card { display: flex; min-width: 0; min-height: 132px; align-items: center; gap: 24px; padding: clamp(20px, 2.4vw, 32px); border-color: #dfdfdf; border-radius: 16px; background: var(--cor-branco); box-shadow: 0 2px 8px rgb(20 20 20 / 3%); }
+.internal-page .service-details-section--exams .service-detail-card:last-child { grid-column: 2; }
+.internal-page .service-details-section--exams .service-detail-icon { width: 56px; height: 56px; flex: none; color: var(--cor-vermelho-destaque); stroke-width: 1.45; }
+.internal-page .service-details-section--exams .service-detail-card h3 { margin: 0; font-size: clamp(17px, 1.45vw, 24px); line-height: 1.25; }
+.internal-page .service-details-cta, .internal-page .service-how-cta { margin-top: 24px; }
+.internal-page .service-consult-link { align-self: start; }
 .internal-page .service-situation { background: var(--cor-branco); }
 .internal-page .service-how .service-visual { max-width: 560px; justify-self: end; }
 .internal-page .service-personalized { padding-bottom: var(--section-space); }
@@ -20,8 +33,14 @@
 @media (max-width: 52rem) {
   .internal-page .editorial-row { grid-template-columns: 1fr; gap: 24px; }
   .internal-page .service-how .service-visual, .internal-page .service-personalized .service-visual { height: auto; }
+  .internal-page .service-details-section--exams .service-details-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .internal-page .service-details-section--exams .service-detail-card { gap: 16px; }
+  .internal-page .service-details-section--exams .service-detail-card:last-child { grid-column: auto; }
 }
 @media (max-width: 38rem) {
   .internal-page .service-related-grid, .internal-page .situation-grid { grid-template-columns: 1fr; }
   .internal-page .faq-item { padding-inline: 16px; }
+  .internal-page .service-details-section--exams .service-details-grid { grid-template-columns: 1fr; }
+  .internal-page .service-details-section--exams .service-detail-card { min-height: 104px; padding: 20px; }
+  .internal-page .service-details-section--exams .service-detail-icon { width: 48px; height: 48px; }
 }

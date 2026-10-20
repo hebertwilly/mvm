@@ -4,40 +4,49 @@ import BannerSingle from '../../components/BannerSingle.astro';
 import SectionTitle from '../../components/SectionTitle.astro';
 import HistoryTimeline from '../../components/HistoryTimeline.astro';
 import CoverageMap from '../../components/CoverageMap.astro';
-import StructureGallery from '../../components/StructureGallery.astro';
+import AboutGallery from '../../components/AboutGallery.astro';
 import ContactButton from '../../components/ContactButton.astro';
 import Icon from '../../components/Icon.astro';
+import { coverage } from '../../config/location.js';
 import { Image } from 'astro:assets';
-import about from '../../assets/images/Colaboração em segurança e saúde ocupacional-3.png';
-import history from '../../assets/images/banners/seguranca.png';
+import history from '../../assets/images/mayaramoraes.jpg';
 import future from '../../assets/images/proximo-capitulo-provisorio.png';
-import institutional from '../../assets/images/banners/institucional.png';
-import medicine from '../../assets/images/banners/medicina.png';
-import onsite from '../../assets/images/banners/inloco.png';
-import exam from '../../assets/images/Medição de pressão no atendimento ocupacional-2.png';
+import aboutBanner from '../../assets/images/banner-sobre-mvm.png.png';
+import team1 from '../../assets/images/1.png';
+import team2 from '../../assets/images/2.png';
+import team3 from '../../assets/images/3.png';
+import homeTeam1 from '../../assets/images/img1.png';
+import homeTeam3 from '../../assets/images/img3.png';
 import '../../styles/about-contact.css';
 import '../../styles/about-contact-fidelity.css';
+import '../../styles/about-updates.css';
 
 const banner = {
-  key: 'institutional', eyebrow: 'SOBRE NÓS',
+  key: 'institutional', image: aboutBanner, className: 'about-banner', eyebrow: 'SOBRE NÓS',
   title: 'Conhecimento técnico e cuidado próximo da sua empresa.',
-  description: 'Segurança do trabalho e medicina ocupacional com clientes em São Paulo e no Paraná.',
+  description: 'Segurança do Trabalho e saúde ocupacional com atendimento próximo às empresas.',
   cta: 'Fale conosco', message: 'general',
-  desktopPosition: 'center center', mobilePosition: '77% center',
+  desktopPosition: 'center center', mobilePosition: '78% center',
 };
 const ways = [
-  { icon: 'people', title: 'Atendimento personalizado', text: 'Entendemos as necessidades de cada empresa para planejar o atendimento conforme sua realidade.' },
-  { icon: 'operation', title: 'Proximidade com a operação do cliente', text: 'Conversamos sobre o contexto de cada projeto e acompanhamos as demandas de segurança e saúde ocupacional.' },
-  { icon: 'location', title: 'Atendimento in loco', text: 'Realizamos exames médicos dentro da empresa do cliente, conforme a possibilidade de atendimento.' },
+  { icon: 'people', title: 'Levantamento da demanda', text: 'Consideramos as informações da empresa para definir o escopo do atendimento.' },
+  { icon: 'operation', title: 'Comunicação com a equipe', text: 'Alinhamos as etapas do atendimento com a empresa ao longo da execução.' },
+  { icon: 'location', title: 'Atendimento in loco', text: 'Planejamos o atendimento ocupacional na empresa para grupos a partir de 10 colaboradores.' },
 ];
-// Prévia visual provisória. Substituir por seis fotografias reais da MVM antes da publicação.
-const structurePhotos = [
-  { src: institutional.src, alt: 'Ambiente de trabalho com profissionais', caption: 'Ambiente de trabalho' },
-  { src: medicine.src, alt: 'Profissional de saúde em ambiente de atendimento', caption: 'Atendimento ocupacional' },
-  { src: exam.src, alt: 'Medição de pressão arterial', caption: 'Cuidado com a saúde' },
-  { src: history.src, alt: 'Profissionais em ambiente industrial', caption: 'Ambiente industrial' },
-  { src: about.src, alt: 'Profissionais em reunião de trabalho', caption: 'Planejamento' },
-  { src: onsite.src, alt: 'Atendimento médico em ambiente de trabalho', caption: 'Atendimento no local' },
+const teamPhotos = [
+  { src: team1, alt: 'Dois integrantes da equipe reunidos em ambiente interno.' },
+  { src: team2, alt: 'Duas integrantes da equipe em um evento de Segurança do Trabalho.' },
+  { src: team3, alt: 'Cinco integrantes da equipe reunidos em ambiente interno.' },
+];
+const galleryPhotos = [
+  ...teamPhotos,
+  { src: homeTeam1, alt: 'Grupo da MVM reunido em ambiente interno.' },
+  { src: homeTeam3, alt: 'Profissionais com capacetes e equipamentos de proteção em área industrial.' },
+];
+const specialties = [
+  { icon: 'helmetShield', title: 'Segurança do Trabalho', roles: ['Técnicos de Segurança do Trabalho', 'Engenheiro de Segurança do Trabalho'] },
+  { icon: 'stethoscope', title: 'Saúde Ocupacional', roles: ['Enfermeira do Trabalho', 'Técnica de Enfermagem', 'Médico Avaliador', 'Médico do Trabalho'] },
+  { icon: 'clipboard', title: 'Administrativo', roles: ['Auxiliar Administrativo'] },
 ];
 ---
 <InternalLayout
@@ -52,12 +61,12 @@ const structurePhotos = [
         <span class="reference-kicker">SOBRE NÓS</span>
         <SectionTitle id="about-intro-title">Quem é a MVM</SectionTitle>
         <div class="editorial-copy" data-motion="reveal">
-          <p>A MVM Segurança e Medicina Ocupacional atua desde 2019 com projetos de segurança do trabalho, atendimento médico e exames médicos.</p>
-          <p>Atendemos indústrias, empresas do agronegócio e construtoras. Hoje, temos clientes em São Paulo e no Paraná e consideramos as necessidades de cada empresa.</p>
+          <p>A MVM Segurança e Medicina Ocupacional atua desde 2019 em Segurança do Trabalho, exames ocupacionais e complementares, atendimento in loco e treinamentos.</p>
+          <p>Com unidades em Taguaí e Taquarituba, atendemos empresas de diferentes regiões com atenção às necessidades de cada operação.</p>
         </div>
       </div>
-      <figure class="section-photo" data-motion="reveal">
-        <Image src={about} alt="Imagem ilustrativa de profissionais analisando informações em uma mesa." widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" />
+      <figure class="section-photo about-team-photo" data-motion="reveal" data-about-gallery>
+        {teamPhotos.map(({ src, alt }, index) => <Image src={src} alt={alt} aria-hidden={index === 0 ? 'false' : 'true'} class:list={['about-slide', { 'is-active': index === 0 }]} widths={[360, 560, 800]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" decoding="async" />)}
       </figure>
     </div>
   </section>
@@ -68,15 +77,33 @@ const structurePhotos = [
         <span class="reference-kicker">NOSSA TRAJETÓRIA</span>
         <SectionTitle id="story-title">Nossa história</SectionTitle>
         <div class="editorial-copy" data-motion="reveal">
-          <p>A MVM foi fundada por Mayara Moraes em 2019. Ao trabalhar como auditora interna, ela identificou demandas de segurança do trabalho relacionadas à certificação no setor têxtil. Com formação na área, iniciou sua atuação nesse mercado.</p>
-          <p>Em 2022, a clínica surgiu acompanhando o aumento da demanda e das necessidades relacionadas ao eSocial, ampliando a atuação em medicina ocupacional.</p>
+          <p>A MVM foi fundada por Mayara Moraes em 2019. Durante sua atuação como auditora interna no setor têxtil, ela identificou demandas de Segurança do Trabalho e iniciou a empresa para atender essas necessidades.</p>
+          <p>Em 2022, a MVM ampliou sua atuação com a abertura da clínica, em resposta ao aumento da demanda e às necessidades relacionadas ao eSocial.</p>
         </div>
       </div>
-      <figure class="section-photo about-story-photo" data-motion="reveal"><Image src={history} alt="Profissionais em ambiente industrial" widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" /></figure>
+      <figure class="section-photo about-story-photo" data-motion="reveal"><Image src={history} alt="Mayara Moraes, fundadora da MVM" widths={[480, 720, 960]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" /></figure>
     </div>
   </section>
 
   <HistoryTimeline />
+
+  <section class="section" aria-labelledby="team-title">
+    <div class="container">
+      <span class="reference-kicker">NOSSA EQUIPE</span>
+      <SectionTitle id="team-title">Profissionais que compõem a MVM</SectionTitle>
+      <div class="team-specialties">
+        {specialties.map(({ icon, title, roles }) => <article class="team-specialty" data-motion="card">
+          <div class="team-specialty-copy">
+            <div class="team-specialty-heading">
+              <span class="team-specialty-marker" aria-hidden="true"><Icon name={icon} /></span>
+              <h3>{title}</h3>
+            </div>
+            <ul>{roles.map((role) => <li>{role}</li>)}</ul>
+          </div>
+        </article>)}
+      </div>
+    </div>
+  </section>
 
   <section class="section services" aria-labelledby="ways-title">
     <div class="container">
@@ -98,22 +125,22 @@ const structurePhotos = [
       <div class="split-copy">
         <span class="reference-kicker">ABRANGÊNCIA</span>
         <SectionTitle id="coverage-title">Onde atuamos</SectionTitle>
-        <p data-motion="reveal">Hoje, a MVM atende clientes em São Paulo e no Paraná, com soluções personalizadas para diferentes operações. Para atendimento em outras localidades, converse com nossa equipe.</p>
-        <p class="coverage-legend"><span aria-hidden="true"></span>Estados com clientes atendidos atualmente</p>
-        <p class="coverage-states">São Paulo (SP) · Paraná (PR)</p>
+        <p data-motion="reveal">{coverage.text}</p>
+        <p class="coverage-legend"><span aria-hidden="true"></span>Estados destacados com clientes</p>
+        <p class="coverage-states">{coverage.states} · Nordeste (região)</p>
       </div>
       <CoverageMap />
     </div>
   </section>
 
-  <StructureGallery photos={structurePhotos} />
+  <AboutGallery photos={galleryPhotos} />
 
   <section class="section services" aria-labelledby="future-title">
     <div class="container split-grid about-future-grid">
       <div class="split-copy">
         <span class="reference-kicker">NOSSO FUTURO</span>
         <SectionTitle id="future-title">Nosso próximo capítulo</SectionTitle>
-        <p data-motion="reveal">Queremos ser referência nas regiões em que atuamos, com qualidade, agilidade e uma atuação que contribua para a gestão de custos dos nossos clientes.</p>
+        <p data-motion="reveal">A MVM busca ampliar os departamentos, incorporar tecnologia, agilizar as entregas e fortalecer o relacionamento com clientes e parceiros.</p>
       </div>
       <figure class="section-photo about-future-photo" data-motion="reveal"><Image src={future} alt="Estrada seguindo até o horizonte" widths={[480, 720, 1080]} sizes="(max-width: 52rem) 100vw, 560px" loading="lazy" /></figure>
     </div>
@@ -126,4 +153,7 @@ const structurePhotos = [
       <div data-motion="reveal"><ContactButton label="Fale conosco" variant="light" icon="whatsapp" /></div>
     </div>
   </section>
+  <script>
+    import '../../scripts/home-interactions.js';
+  </script>
 </InternalLayout>

@@ -1,8 +1,9 @@
 ---
+import { Image } from 'astro:assets';
+import logo from '../assets/images/logo-mvm-ajustada.png';
 const { compact = false } = Astro.props;
 ---
 
-<a class="brand" href="/" aria-label="MVM Segurança e Medicina Ocupacional — início">
-  <span class="brand-word">MVM</span>
-  <span class="brand-description">{compact ? 'Segurança e Medicina Ocupacional' : <>Segurança e<br />Medicina Ocupacional</>}</span>
+<a class:list={['brand', { 'brand--compact': compact }]} href="/">
+  <Image src={logo} alt="MVM Segurança e Medicina Ocupacional" width={compact ? 190 : 160} loading="eager" decoding="async" />
 </a>

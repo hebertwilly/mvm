@@ -11,7 +11,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; }
 body, h1, h2, h3, p, ul, ol, figure { margin: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-height) + 24px); }
+html { scroll-padding-top: calc(var(--header-height) + 24px); }
 body { padding-top: var(--header-height); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; line-height: 1.6; color: var(--cor-preto); background: var(--cor-branco); -webkit-font-smoothing: antialiased; overflow-wrap: anywhere; }
 img, svg { display: block; max-width: 100%; }
 img { height: auto; }
@@ -35,9 +35,10 @@ p { color: var(--cor-texto-secundario); }
 .site-header { position: fixed; inset: 0 0 auto; z-index: 100; background: var(--cor-branco); border-bottom: 1px solid #E8E8E8; transition: box-shadow 200ms ease; }
 .site-header.is-scrolled { box-shadow: 0 4px 20px rgb(20 20 20 / 7%); }
 .header-row { min-height: 80px; display: flex; align-items: center; justify-content: space-between; gap: clamp(16px, 2vw, 32px); }
-.brand { display: inline-flex; align-items: center; gap: 16px; min-width: 0; }
-.brand-word { font-size: 32px; font-weight: 850; letter-spacing: -.055em; line-height: 1; }
-.brand-description { padding-left: 16px; border-left: 1px solid #BDBDBD; font-size: 12px; line-height: 1.35; font-weight: 550; }
+.brand { display: inline-flex; align-items: center; min-width: 0; flex: none; }
+.brand img { width: 160px; height: auto; }
+.header-row .brand img { width: 124px; }
+.brand--compact img { width: 190px; }
 .main-navigation, .main-navigation ul { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); }
 .main-navigation ul, .site-footer ul { list-style: none; padding: 0; }
 .nav-link { position: relative; display: inline-flex; align-items: center; min-height: 48px; font-size: 14px; font-weight: 650; transition: color 180ms ease; }
@@ -104,7 +105,10 @@ figcaption { font-size: 12px; color: var(--cor-texto-secundario); line-height: 1
 .split-copy p { max-width: 520px; }
 .split-copy .button { margin-top: 24px; }
 .section-photo img { width: 100%; height: auto; border-radius: 16px; }
-.steps-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(24px, 3vw, 32px); padding: 0; list-style: none; }
+.steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 32px); padding: 0; list-style: none; }
+.service-four-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.proposal-hint { max-width: 820px; margin-top: 28px; }
+.numbers-grid .card h3 { font-size: clamp(26px, 3vw, 38px); }
 .step { padding-right: 8px; }
 .step-number { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; color: var(--cor-vermelho-destaque); background: #FCF0F1; font-size: 20px; font-weight: 750; margin-bottom: 16px; }
 .step h3 { margin-bottom: 8px; }
@@ -118,8 +122,6 @@ figcaption { font-size: 12px; color: var(--cor-texto-secundario); line-height: 1
 .site-footer { border-top: 1px solid #E8E8E8; background: var(--cor-branco); }
 .footer-main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .75fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); padding-block: clamp(36px, 4vw, 56px); }
 .footer-brand, .footer-navigation, .footer-channels { min-width: 0; }
-.site-footer .brand-word { font-size: 24px; }
-.site-footer .brand-description { font-size: 11px; }
 .site-footer h2 { margin-bottom: 12px; font-size: 15px; letter-spacing: 0; }
 .site-footer ul { display: grid; gap: 2px; }
 .site-footer nav a, .site-footer .footer-channels a, .footer-channel-text { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; max-width: 100%; font-size: 14px; line-height: 1.4; transition: color 180ms ease; }
@@ -143,9 +145,7 @@ figcaption { font-size: 12px; color: var(--cor-texto-secundario); line-height: 1
   html:has(.menu-enabled) { --header-height: 81px; }
   .header-row { min-height: 80px; flex-wrap: wrap; gap: 0; }
   .header-row .brand { min-height: 80px; }
-  .brand { gap: 8px; }
-  .brand-word { font-size: 28px; }
-  .brand-description { padding-left: 8px; font-size: 10px; }
+  .header-row .brand img { width: 112px; }
   .menu-toggle:not([hidden]) { display: inline-flex; }
   .menu-toggle { padding-inline: 12px; }
   .main-navigation { width: 100%; flex-direction: column; align-items: stretch; gap: 16px; padding-block: 16px 24px; max-height: calc(100vh - 81px); max-height: calc(100dvh - 81px); overflow-y: auto; }
